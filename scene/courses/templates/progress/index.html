@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Прогресс{% endblock %}
+
+{% block content %}
+  <div class="breadcrumps">
+    <a href="/" target="_self">Главная</a> / Прогресс
+  </div>
+  <h1>Начатые курсы</h1>
+  {% for course in courses_in_progress %}
+  <div class="list-item">
+    <div class = "progress-div">
+    <div style="display: table;height: 100%;">
+      <div class="block course-header">
+        <object  type="image/svg+xml" data="{% static "courses/v51/images/" %}{{ course.course_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
+      </div>
+      <div class="block course-header left-padding">
+        <h1 class="no-margin"><a href="{% url 'course' course.course_id %}" target="_self">{{ course.title }}</a></h1>
+      </div>
+    </div>
+  </div>
+
+    <div class="content">
+      <div class="profile-skills">
+        <div>
+          <input type="checkbox" id="sk1">
+          <ul class="skills skills1">
+            {% if course.total_chapters %}
+              <li class="sk-chapters" style="--per: {{ course.chapters_pct }};"><span>Главы: {{ course.finished_chapters }} / {{ course.total_chapters }}</span></li>
+            {% endif %}
+            {% if course.total_tasks %}
+              <li class="sk-tasks" style="--per: {{ course.tasks_pct }};"><span>Задачи: {{ course.finished_tasks }} / {{ course.total_tasks }}</span></li>
+            {% endif %}
+            {% if course.total_projects %}
+              <li class="sk-projects" style="--per: {{ course.projects_pct }};"><span>Проекты: {{ course.finished_projects }} / {{ course.total_projects }}</span></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="indent-medium">
+      <a href="/courses/{{course.course_id}}/current_chapter/" class="btn-white" target="_self">
+        <i class="fa fa-chevron-right fa-fw"></i>
+        Продолжить
+      </a>
+    </div>
+  </div>
+  {% empty %}
+  <p class="smoky">Пока нет начатых курсов.</p>
+  {% endfor %}
+
+  <h1>Пройденные курсы</h1>
+  {% for course in courses_finished %}
+  <div class="list-item">
+    <div class = "progress-div">
+    <div style="display: table;height: 100%;">
+      <div class="block course-header">
+        <object  type="image/svg+xml" data="{% static "courses/v51/images/" %}{{ course.course_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
+      </div>
+      <div class="block course-header left-padding">
+        <h1 class="no-margin"><a href="{% url 'course' course.course_id %}" target="_self">{{ course.title }}</a></h1>
+      </div>
+    </div>
+  </div>
+  <div>
+
+    <div class="content">
+      <div class="profile-skills">
+        <div>
+          <input type="checkbox" id="sk1">
+          <ul class="skills skills1">
+            {% if course.total_chapters %}
+              <li class="sk-chapters" style="--per: {{ course.chapters_pct }};"><span>Главы: {{ course.finished_chapters }} / {{ course.total_chapters }}</span></li>
+            {% endif %}
+            {% if course.total_tasks %}
+              <li class="sk-tasks" style="--per: {{ course.tasks_pct }};"><span>Задачи: {{ course.finished_tasks }} / {{ course.total_tasks }}</span></li>
+            {% endif %}
+            {% if course.total_projects %}
+              <li class="sk-projects" style="--per: {{ course.projects_pct }};"><span>Проекты: {{ course.finished_projects }} / {{ course.total_projects }}</span></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+  {% empty %}
+  <p class="smoky">Пока нет пройденных курсов.</p>
+  {% endfor %}
+{% endblock %}

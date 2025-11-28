@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Поддержать проект{% endblock %}
+
+{% block content %}
+  <h1 style="margin-top: 40px;">Задонатить!</h1>
+  <div class="list-item">
+    <a href="https://boosty.to/senjun" target="_blank" rel="noopener noreferrer">
+      <img src="{% static "courses/v51/images/" %}boosty.png" alt="Boosty" style="max-width: 200px;"/>
+    </a>
+    <br/>
+    <p class="indent-medium">
+      <a href="https://boosty.to/senjun" target="_blank" rel="noopener noreferrer">Подписывайтесь</a> на нас на Boosty! Чем больше подписчиков, тем выше шанс, что проект продолжит развиваться.<br/><br/>
+      <a href="https://boosty.to/senjun/donate" target="_blank" rel="noopener noreferrer">Единоразовым донатам</a> мы тоже очень рады.
+    </p>
+  </div>
+  <div class="list-item">
+    <h1>Перевод по номеру телефона</h1>
+    <p>
+      +7 (925) 178-63-35<br/>
+      Альфа-Банк<br/>
+      Получатель: <a href="/authors/olga_khlopkova/" target="_self" rel="noopener noreferrer">Оля</a><br/>
+      Комментарий к переводу: «Донат».
+    </p>
+  </div>
+  <div class="list-item">
+    <h1>Для клиентов Альфа-Банка</h1>
+    <p>Перевод по QR-коду:</p>
+        <img src="{% static "courses/v51/images/" %}qr_code_donation_senjun.jpg" alt="QR-код для донатов" style="max-width: 200px;"/>
+  </div>
+{% endblock %}

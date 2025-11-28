@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+  <h1>Личный кабинет</h1>
+
+  <div class="list-item">
+    <div class="text-about text-small indent-small">
+        Имя пользователя:
+    </div>
+    <div>{{ login }}</div>
+    
+    {% if email %}
+      <div class="text-about text-small indent-small">
+          E-mail:
+      </div>
+      <div>{{ email }}</div>
+          <div class="indent-medium">
+          <a href="{% url 'account_reset_password' %}" class="btn-white" target="_self">Сменить пароль</a>
+      </div>
+    {% else %}
+      <div class="text-about text-small indent-small">Вход на сайт осуществлен через сторонний сервис.</div>
+    {% endif %}  
+
+    <div class="indent-medium">
+      <a href="/delete_account" class="btn-gray" target="_self">Удалить аккаунт</a>
+    </div>
+  </div>
+
+  <div class="list-item">
+    <h3>Синхронизация с telegram-ботом</h3>
+    <div class="text-about text-small indent-small">
+      <div class="tg-header">
+        <a href="https://t.me/sen_jun_bot" target="_blank" rel="noopener noreferrer">
+          <img src="{% static 'courses/v51/images/telegram_blue.svg' %}" alt="SenJun on GitHub" class=""/>
+        </a>
+      </div>
+      <div class="course-header left-padding text-left text-about">
+        <div>
+            Проходить курсы можно не только на сайте, но и в <a href="https://t.me/sen_jun_bot" target="_blank" rel="noopener noreferrer">нашем telegram-боте.</a>
+        </div>
+        <div class="indent-small">
+          {% if telegram_login %}
+          <span>
+            Ваш прогресс синхронизировн с telegram-ботом.</span>
+          {% else %}
+            Чтобы прогресс обновлялся и там и там, свяжите учетную запись с telegram-ботом.
+          {% endif %} 
+        </div>
+      </div>
+    
+    </div>
+
+    <div class="indent-medium">
+      {% if telegram_login %}
+        <button class="btn-gray" id="btn-sync-acc-bot-remove">
+          Удалить связь аккаунта с telegram-ботом
+        </button>
+      {% else %}
+        {% if telegram_code %}
+          <div class="task_text">
+            <p class="text-about">В telegram-боте ведите команду и код для синхронизации:</p>
+            <p class="primary"><span id="tg_bot_key_val">/sync {{ telegram_code }}</span><i class="fa fa-solid fa-copy icon-copy" onclick="copyCodeToClipboard()"></i></p>
+          </div>
+        {% else %}
+          <button class="btn-white" id="btn-sync-acc-bot">
+            Связать аккаунт с ботом
+          </button>
+        {% endif %}
+      {% endif %}
+
+      <div id="tg_bot_key">
+      </div>
+    </div>
+  </div>
+{% endblock %}

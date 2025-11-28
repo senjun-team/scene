@@ -1,0 +1,50 @@
+{% extends 'base.html' %}  
+{% load static %}
+{% load socialaccount %}
+
+{% block title %}Регистрация{% endblock %}
+{% block content %}  
+<div class = "container">  
+  <h1>Регистрация</h1>
+  <div class="list-item">
+    <div class="text-about form-label">
+      С помощью сервиса
+    </div>
+    <div>
+      <a target="_self" href="{% provider_login_url "telegram" %}"><img src="{% static 'courses/v51/images/telegram.png' %}" alt="Telegram" class="icon-login-social"/></a>
+      <a target="_self" href="{% provider_login_url "vk" %}"><img src="{% static 'courses/v51/images/vk.png' %}" alt="VK" class="icon-login-social"/></a>
+      <a target="_self" href="{% provider_login_url "yandex" %}"><img src="{% static 'courses/v51/images/yandex.png' %}" alt="Яндекс" class="icon-login-social"/></a>
+    </div>
+  <form method="post" novalidate>  
+    {% csrf_token %}  
+      {% for field in form %}  
+        <div>  
+          <p class="text-about form-label">
+            {{ field.label_tag }} 
+          </p> 
+          {{ field }}  
+          {% if field.help_text %}  
+            <small style="display: none ">{{ field.help_text }}</small>  
+          {% endif %}  
+          {% for error in field.errors %}  
+            <p class="alert-primary">{{ error }}</p>  
+          {% endfor %}  
+        </div>  
+      {% endfor %}  
+
+      {% for error in form.non_field_errors %}  
+      <p class="alert-primary">{{ error }}</p>  
+      {% endfor %}  
+
+      <div class="indent-medium">
+        <button id="button_register" type="submit" class="btn" formtarget="_self">Зарегистрироваться</button> 
+      </div>
+      <div class="indent-medium">
+        <p class="text-about form-label">
+         Регистрируясь на сайте, вы соглашаетесь с <a href="/terms/" target="_blank" rel="noopener noreferrer">правилами площадки</a>
+        </p>
+      </div>
+  </form>
+</div>
+</div>  
+{% endblock %}

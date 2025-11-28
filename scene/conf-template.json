@@ -1,0 +1,38 @@
+{
+    "django_secret_key": "django-insecure",
+    "static_root": "/var/www/scene/static/",
+    "socialaccount": {
+        "yandex": {
+            "client_id": "client-id",
+            "secret": "secret",
+            "key": "key"
+        },
+        "vk": {
+            "client_id": "client-id",
+            "secret": "secret",
+            "key": "key"
+        },
+        "telegram": {
+            "client_id": "client-id",
+            "secret": "secret",
+            "key": "key"
+        }
+    },
+    "scene_db": {
+        "host": "127.0.0.1",
+        "port": "5432",
+        "password": "scene"
+    },
+    "mail_for_user_registration": {
+        "host": "smtp.some.org",
+        "email_address": "your_email",
+        "host_password": "password"
+    },
+    "tg_bot_senjun": {
+        "key": "must_be_equal_to_key_in_telegram_bot_conf"
+    },
+    "tg_bot_infra_alerts": {
+        "token": "token",
+        "channel_id": "channel_id"
+    }
+}

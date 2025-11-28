@@ -1,0 +1,115 @@
+:root {
+	--w1: #fff;
+	--w2: #eee;
+	--t1: all 0.5s ease 0s;
+}
+
+.profile-skills {
+	display: flex;
+	top: 10px;
+	width: 100%;
+	align-items: flex-start;
+}
+
+.profile-skills > div {
+	width: 98%;
+	margin-right: 3%;
+	border-radius: 2px;
+	position: relative;
+}
+
+ul.skills {
+	position: relative;
+    padding: 0px;
+
+}
+
+ul.skills li {
+	--per: 50;
+	--dur: calc(calc(var(--per) / 100) * 1.5s);
+	margin: 0 0 5px 0;
+	list-style: none;
+	padding: 20px 0;
+	position: relative;
+}
+
+ul.skills li:before {
+	content: "";
+	position: absolute;
+	background: var(--color-main-icon);
+	height: 16px;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	border-radius: 2px;
+	border: 1px solid var(--color-main-icon);
+	border-color: var(--color-main-icon);
+
+	background: linear-gradient(
+		90deg,
+		var(--track) calc(calc(var(--per) * 1%) + 4px),
+		var(--color-main-icon) calc(calc(var(--per) * 1%) + 4px)
+	);
+}
+
+.sk-chapters {
+    --track: var(--color-blue);
+}
+
+.sk-tasks {
+    --track: var(--color-green);
+}
+
+.sk-projects {
+    --track: var(--color-btn-vivid);
+}
+
+ul.skills:hover li:after,
+label:hover + ul.skills li:after,
+input:checked + label + ul.skills li:after {
+	width: calc(calc(var(--per) * 1%) - 2px);
+}
+
+@keyframes start {
+	100% {
+		width: calc(calc(var(--per) * 1%) - 2px);
+	}
+}
+
+ul.skills li span {
+    content: counter(percent);
+}
+
+ul.skills li span:before {
+	position: absolute;
+	right: -25px;
+	top: 43px;
+	transition: var(--t1);
+	content: "";
+	opacity: 1;
+	border: 7px solid #fff0;
+}
+
+ul.skills li span:after {
+	position: absolute;
+	right: -50px;
+	top: 38px;
+	transition: var(--t1);
+	counter-reset: percent var(--per);
+	content: counter(percent) "%";
+	color: var(--color-text-body);
+	opacity: 1 !important;
+	padding: 4px 6px;
+	pointer-events: none;
+}
+
+.profile-skills input {
+	display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .profile-skills > div {
+        width: 85%;
+        margin-right: 2px;
+    }
+}

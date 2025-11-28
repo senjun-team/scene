@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Senior Junior{% endblock %}
+
+{% block content %}
+  <h1 style="margin-top: 40px;" class="smoky">Курсы для программистов от программистов</h1>
+  <div class="list-item">
+
+    <p><i class="fa fa-solid fa-star main-icon"></i> <b>Senior Junior</b> — так называется наша площадка с курсами. Каждый сеньор чувствует себя джуном, когда учит новый язык ;)</p>
+    <p><i class="fa fa-solid fa-terminal main-icon"></i> Здесь вы найдете опенсорс курсы для разработчиков, которые хотят выучить новый язык максимально <b>быстро.</b></p>
+    <h1 class="indent-medium smoky">У нас есть</h1>
+    <p><i class="fa fa-solid fa-rocket main-icon"></i> Практика в <b>online IDE.</b> Много практики. Маленькими порциями. 
+        Потому что нельзя чему-то научиться, просто читая книжку или смотря лекции.</p>
+    <p><i class="fa fa-solid fa-rocket main-icon"></i> Концентрированная <b>теория</b> для активной разработки и код-ревью.</p>
+
+    <h1 class="indent-medium smoky">У нас нет</h1>
+    <p><i class="fa fa-solid fa-trash-o main-icon"></i> Сверх-упрощенной подачи материала и иллюзии получения знаний.</p>
+    <p><i class="fa fa-solid fa-trash-o main-icon"></i> Сертификатов и гарантий трудоустройства.</p>
+
+    <h1 class="indent-medium smoky">SenJun нанесет вам непоправимую пользу, если вы</h1>
+    <p><i class="fa fa-solid fa-code main-icon"></i> Имеете опыт разработки и не нуждаетесь в пояснениях, что такое лямбда-функция и чем класс отличается от объекта.</p>
+    <p><i class="fa fa-solid fa-hourglass main-icon"></i> Хотите быстро выучить новый язык.</p>
+
+    <h1 class="indent-medium smoky">И это не всё</h1>
+    <p><i class="fa fa-solid fa-telegram main-icon"></i> Курсы можно проходить не только на сайте, но и в нашем <a href="https://t.me/sen_jun_bot" target="_blank" rel="noopener noreferrer">telegram-боте.</a></p>
+    <p><i class="fa fa-solid fa-github main-icon"></i> Тексты курсов — <a href="https://github.com/senjun-team/senjun-courses" target="_blank" rel="noopener noreferrer">это опенсорс.</a> Оставляйте баг-репорты и предложения по улучшению!</p>
+
+  </div>
+  <h1>Курсы</h1>
+  {% for course in courses_list %}
+      <div class="list-item">
+        <div style="display: table;height: 100%;">
+          <div class="block course-header">
+            <object  type="image/svg+xml" data="{% static "courses/v51/images/" %}{{ course.course_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
+          </div>
+          <div class="block course-header left-padding">
+            <h1 class="no-margin"><a href="{% url 'course' course.course_id %}" target="_self">{{ course.title }}</a></h1>
+          </div>
+        </div>
+
+        <div>
+        {{ course.description|linebreaks }}
+        </div>
+
+        <div class="text-about text-small indent-small">
+          На этом языке написаны:
+        </div>
+        <div>
+          {% for project in course.tags.projects %}
+          <div class="chips block text-about text-small">
+            <a href="{{project.url}}" target="_blank" rel="noopener noreferrer" class="smoky">{{ project.name }}</a>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="text-about text-small indent-small">
+          {% if course.tags.tasks %}
+          Вас ждут:
+          {% else %}
+          Вас ждет:
+          {% endif %}
+        </div>
+        <div>
+          <div class="chips block text-small"><a href="{{course.tags.url}}" target="_blank" rel="noopener noreferrer" class="smoky">{{ course.tags.version }}</a></div>
+          {% if course.tags.tasks %}
+            {% if course.tags.chapters %}<div class="chips block text-small"><a href="{% url 'course' course.course_id %}" target="_self" class="smoky">{{ course.tags.chapters }}</a></div>{% endif %}
+              <div class="chips block text-small"><a href="{% url 'course' course.course_id %}" target="_self" class="smoky">{{ course.tags.tasks }}</a></div>
+              {% if course.tags.practice_projects %}<div class="chips block text-small"><a href="{% url 'course' course.course_id %}" target="_self" class="smoky">{{ course.tags.practice_projects }}</a></div>{% endif %}
+          {% endif %}
+        </div>
+
+        <div>
+          <div class="text-about text-small indent-small">
+            {% if course.tags.authors|length > 1 %}
+               Авторы:
+            {% else %}
+               Автор:
+            {% endif %}
+          </div>
+          <div class="text-about text-small indent-small author-container">
+              {% for author in course.tags.authors %}
+                  <img src="{% static "courses/v51/images/authors/" %}{{ author.author }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+                  <span class="margin-horisontal-small"><a href="/authors/{{ author.author }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
+              {% endfor %}
+          </div>
+
+          {% if course.tags.edited_by|length > 0 %}
+            <div class="text-about text-small indent-small">
+              Под редакцией:
+            </div>
+            <div class="text-about text-small indent-small author-container">
+              {% for author in course.tags.edited_by %}
+                  <img src="{% static "courses/v51/images/authors/" %}{{ author.edited_by }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+                  <span class="margin-horisontal-small"><a href="/authors/{{ author.edited_by }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+        </div>
+
+        <div class="indent-medium">
+          {% if user.is_authenticated %}
+              {% if course.status == 'not_started' %}
+                <a href="/courses/{{course.course_id}}/start_course/" class="btn-white">
+                  <i class="fa fa-play fa-fw"></i>
+                  Начать
+                </a>
+              {% else %}
+                {% if course.status == 'in_progress' %}
+                  <a href="/courses/{{course.course_id}}/current_chapter/" class="btn-white" target="_self">
+                    <i class="fa fa-chevron-right fa-fw"></i>
+                    Продолжить
+                  </a>
+                {% else %}
+                    {% if course.status == 'completed' %}
+                    <h1 class="info-block">
+                      <i class="fa fa-solid fa-star"></i> Курс успешно завершен
+                    </h1>
+                    {% endif %}
+                {% endif %}
+              {% endif %}
+
+          {% else %}
+            <a href="/login/?next=/courses/{{course.course_id}}/start_course/" class="btn-white" target="_self">
+              <i class="fa fa-play fa-fw"></i>
+              Начать
+            </a>
+          {% endif %}
+        </div>
+      </div>
+  {% endfor %}
+
+  <h1>Обратная связь</h1>
+  <div class="list-item">
+    <p>
+    Мы рады фидбэку и оперативно на него реагируем! Вы можете сообщить нам об ошибке, предложить улучшение, поделиться мыслями о проекте и попробовать свои силы в качестве автора курса либо ревьюера. 
+  </p>
+    <p class="smoky">
+    Для этого есть:
+  </p>
+  <p>
+      <i class="fa fa-solid fa-list main-icon"></i> Форма обратной связи в конце каждой главы курсов у нас на сайте.
+  </p><p>
+      <i class="fa fa-solid fa-terminal main-icon"></i> Команда /help в <a href="https://t.me/sen_jun_bot" target="_blank" rel="noopener noreferrer">telegram-боте.</a>
+    </p>
+    <p>
+      <i class="fa fa-solid fa-telegram main-icon"></i> <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer">Наше комьюнити.</a>
+    </p>
+    
+    <p>
+      <i class="fa fa-solid fa-github main-icon"></i> Issue или Pull request <a href="https://github.com/senjun-team/senjun-courses" target="_blank" rel="noopener noreferrer">на гитхабе.</a>
+    </p>
+    <br/>
+<p>
+  <i class="fa fa-heart fa-fw main-icon"></i> Если вам нравится проект, вы можете <a href="/donation/">поддержать его!</a>
+</p>
+  </div>
+{% endblock %}

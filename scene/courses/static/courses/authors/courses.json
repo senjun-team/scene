@@ -1,0 +1,22 @@
+{
+	"python": [
+		{"author": "olga_khlopkova", "full_name": "Ольга Хлопкова"}, 
+		{"author": "dmitriy_shipilov", "full_name": "Дмитрий Шипилов"}
+	],
+	"rust": [
+		{"author": "vladimir_khatskevich", "full_name": "Владимир Хацкевич"}, 
+		{"author": "anna_bekker", "full_name": "Анна Беккер"}
+	],
+	"haskell": [
+		{"author": "denis_shevchenko", "full_name": "Денис Шевченко"},
+		{"author": "anton_holomyov", "full_name": "Антон Холомьёв"},
+		{"edited_by": "dmitry_churin", "full_name": "Дмитрий Чурин"}
+	],
+	"golang": [
+		{"author": "vyacheslav_korepanov", "full_name": "Вячеслав Корепанов"}
+	],
+	"cpp": [
+		{"author": "olga_khlopkova", "full_name": "Ольга Хлопкова"},
+		{"author": "vladimir_khatskevich", "full_name": "Владимир Хацкевич"}
+	]
+}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<div class="wrapper">
+  {% if status == 'completed' %}
+    <canvas id="world"></canvas>
+  {% endif %}
+
+  <div class="container">
+    {% if status == 'completed' %}
+      <div class="checkmark-circle">
+        <div class="background"></div>
+        <div class="checkmark draw"></div>
+      </div>
+      <p>
+        <h1>Поздравляем!</h1>
+        <h1>Вы успешно завершили курс {{ course_id|title }}</h1>                                                                                                                                                                       
+      </p>
+      {% else %}
+        <h1>Курс {{ course_id|title }} пока не завершен</h1>
+      {% endif %}
+
+      <p class="indent-medium">
+        Что в этом курсе вам понравилось, а что — нет?<br/><br/>
+        <i class="fa fa-solid fa-telegram main-icon"></i> Расскажите об этом <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer">в нашем комьюнити!</a>
+      </p>
+      </p>
+      
+  </div>
+
+</div>
+{% endblock %}
+

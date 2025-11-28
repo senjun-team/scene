@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /user
+Disallow: /progress
+Disallow: */start_course
+Disallow: /login
+Disallow: /signup
+Disallow: /accounts
+Disallow: /account
+Disallow: /terms_of_use
+Disallow: /privacy
+Disallow: /donation

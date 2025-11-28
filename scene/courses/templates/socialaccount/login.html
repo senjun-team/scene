@@ -1,0 +1,223 @@
+{% extends "socialaccount/base_entrance.html" %}
+
+{% load i18n %}
+{% load allauth %}
+{% load static %}
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+{% block content %}
+<style type="text/css">
+
+:root {
+    --color-text-primary: rgba(46, 46, 46, 1);
+    --color-text-secondary: rgba(128, 128, 128, 1);
+
+    --color-primary: rgba(64, 84, 163, 1);
+    --color-secondary: rgba(35, 70, 112, 1);
+    --color-primary-lighter: rgba(132, 149, 219, 1);
+
+    --color-alert-primary: rgba(181, 101, 118, 1);
+    --color-highlight: rgba(249, 177, 148, 1);
+    --color-highlight-intensive: rgba(229, 107, 111, 1);
+    --color-highlight-light: rgba(237, 213, 204, 1);
+
+    --color-max-contrast: rgba(255, 255, 255, 1);
+    --color-light-gray: rgba(245, 245, 245, 1);
+    --color-heavy-gray: rgba(222, 222, 222, 1);
+    --color-light-blue: #b8d8fc;
+    --color-green: #84e3a5;
+
+    --color-ide-active-line: rgba(115, 212, 170, 0.1);
+    --color-console: #07091a;
+
+    --color-smoky: #848fbf;
+    --color-main-icon: #c5cded;
+    --color-lightest-blue: #edf5ff;
+
+    --color-shadow: rgba(0, 0, 0, 0.05);
+
+    --color-blue: #3f60e0;
+    --color-transparent-gray: rgba(35, 70, 112, 0.5);
+
+    /* colors different for themes */
+    --color-green-faded: #d4fae2;
+    --color-switch-theme-symbol: var(--color-primary);
+    --color-switch-theme-symbol-hover: var(--color-blue);
+
+    --color-user-first-letter: var(--color-light-gray);
+    --color-user-first-letter-hover: var(--color-light-blue);
+
+    --color-header-bg: var(--color-max-contrast);
+    --color-link: var(--color-primary);
+    --color-link-hover: var(--color-blue);
+
+    --color-body: var(--color-light-gray);
+    --color-text-body: var(--color-text-primary);
+    --color-breadcrumps: var(--color-text-secondary);
+    --list-item-bg: var(--color-max-contrast);
+    --list-item-border: var(--color-light-gray);
+
+    --color-cm-editor: var(--color-heavy-gray);
+
+    --color-code: var(--color-text-primary);
+    --color-code-bg: var(--color-light-gray);
+    --color-h1: var(--color-text-secondary);
+    --color-btn-gray: var(--color-smoky);
+    --color-btn-white: var(--color-primary);
+    --color-btn-white-hover: var(--color-blue);
+    --color-task-status-label: var(--color-max-contrast);
+    --color-progress-bar: #686b6a;
+    --color-chapter-contents-icon: #c7c5c5;
+
+    --color-dropdown-contents: var(--color-lightest-blue);
+    --color-dropdown-hover: var(--color-max-contrast);
+    --color-sidebar-bg: var(--color-lightest-blue);
+    --color-sidebar-close: var(--color-primary);
+    --color-sidebar-title: var(--color-text-secondary);
+    --color-modal: var(--color-max-contrast);
+    --color-modal-overlay: var(--color-transparent-gray);
+    --color-title-moda: var(--primary-color);
+
+    --color-placeholder: var(--color-text-secondary);
+    --color-blockquote: var(--color-text-secondary);
+    --color-chips: var(--color-main-icon);
+    --color-text-about: var(--color-text-secondary);
+    --color-light-item: var(--color-light-gray);
+    --color-input-border: var(--color-heavy-gray);
+    --color-info: var(--color-lightest-blue);
+    --color-start: var(--color-light-blue);
+    --color-text-green: #2fcc65;
+}
+
+[data-theme="dark"] {
+    --color-switch-theme-symbol: var(--color-light-blue);
+    --color-switch-theme-symbol-hover: var(--color-lightest-blue);
+
+    --color-user-first-letter: var(--color-light-blue);
+    --color-user-first-letter-hover: var(--color-lightest-blue);
+
+    --color-header-bg: var(--color-secondary);
+    --color-link: var(--color-light-blue);
+    --color-link-hover: var(--color-lightest-blue);
+
+    --color-body: #263952;
+    --color-text-body: var(--color-heavy-gray);
+    --color-breadcrumps: var(--color-heavy-gray);
+    --list-item-bg: #28303C;
+    --list-item-border: var(--color-secondary);
+
+    --color-cm-editor: var(--color-secondary);
+
+    --color-code: var(--color-main-icon);
+    --color-code-bg: var(--color-body);
+    --color-h1: var(--color-main-icon);
+    --color-btn-gray: var(--color-primary-lighter);
+    --color-btn-white: var(--color-light-blue);
+    --color-btn-white-hover: var(--color-main-icon);
+    --color-task-status-label: var(--list-item-bg);
+    --color-progress-bar: var(--color-body);
+    --color-chapter-contents-icon: var(--color-smoky);
+    --color-dropdown-contents: var(--color-primary);
+    --color-dropdown-hover: var(--color-primary);
+    --color-sidebar-bg: var(--list-item-bg);
+    --color-sidebar-close: var(--color-heavy-gray);
+    --color-sidebar-title: var(--color-heavy-gray);
+    --color-modal: var(--color-secondary);
+    --color-modal-overlay: rgba(40, 48, 60, 0.8);
+    --color-title-moda: var(--color-main-icon);
+    --color-placeholder: var(--color-smoky);
+    --color-blockquote: var(--color-smoky);
+    --color-chips: var(--color-smoky);
+    --color-text-about: var(--color-smoky);
+    --color-light-item: var(--color-secondary);
+    --color-input-border: var(--list-item-border);
+    --color-info: var(--color-secondary);
+    --color-start: var(--color-primary-lighter);
+    --color-text-green: var(--color-green);
+    --color-green-faded: #7db191;
+}
+
+body {
+    font-family: "Roboto",  sans-serif;
+    color: var(--color-text-body);
+    background-color: var(--list-item-bg);
+    margin: 20px !important;
+    margin-left: 30px !important;
+}
+
+h1 {
+    font-size: 1.5em;
+    font-weight: normal;
+    color: var(--color-h1);
+}
+
+strong {
+    color: var(--color-h1);
+}
+
+ul li::marker {
+    color: var(--color-smoky);
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: var(--color-link);
+}
+
+a:link {
+    color: var(--color-link);
+}
+  
+a:hover {
+    color: var(--color-link-hover);
+}
+
+a:active {
+    color: var(--color-link-hover);
+} 
+
+form button {
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-primary); 
+    color: var(--color-max-contrast);
+    padding: 5px 60px;
+    font-family: "Roboto",  sans-serif;
+    font-size: 1em;
+    height: 2.1em !important;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+div:has(li) {
+    visibility: hidden !important;
+}
+
+</style>
+    {% if process == "connect" %}
+        {% element h1 %}
+            {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+        {% endelement %}
+        {% element p %}
+            {% blocktrans with provider.name as provider %}You are about to connect a new third-party account from {{ provider }}.{% endblocktrans %}
+        {% endelement %}
+    {% else %}
+        {% element h1 %}
+            {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+        {% endelement %}
+        {% element p %}
+            {% blocktrans with provider.name as provider %}You are about to sign in using a third-party account from {{ provider }}.{% endblocktrans %}
+        {% endelement %}
+    {% endif %}
+    {% element form method="post" no_visible_fields=True %}
+        {% slot actions %}
+            {% csrf_token %}
+            {% element button type="submit" %}
+                {% trans "Continue" %}
+            {% endelement %}
+        {% endslot %}
+    {% endelement %}
+{% endblock content %}

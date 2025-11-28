@@ -1,0 +1,386 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru-RU">
+    <head>        
+        <meta name="robots" content="all" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta property="og:site_name" content="Senior Junior">
+
+        <meta name="description" content="{{ title }}">
+        <meta name="keywords" content="">
+
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+        <link rel="stylesheet" href="{% static 'courses/v51/styles/font-awesome/4.7.0/font-awesome.min.css' %}">
+
+        <meta property="og:image" content="{% static 'courses/v51/images/logo.png' %}" />
+        <meta property="og:locale" content="ru_RU">
+	    <meta property="og:type" content="website"/>
+        <script src="{% static 'courses/v51/scripts/ansi_up.js' %}" type="text/javascript"></script>
+           
+        <script src="{% static 'courses/v51/scripts/markdown-it/13.0.1/markdown-it.js' %}"></script>
+        <script src="{% static 'courses/v51/scripts/markdown-it-attrs/4.1.6/markdown-it-attrs.browser.min.js' %}"></script>
+        
+        <script src="{% static 'courses/v51/scripts/header_handler.js' %}"></script>
+        
+        <link rel="stylesheet" href="{% static 'courses/v51/playground.css' %}">
+        <link rel="stylesheet" href="{% static 'courses/v51/practice.css' %}">
+        <script src="{% static 'courses/v51/scripts/ansi_up.js' %}" type="text/javascript"></script>
+        <script defer src="{% static 'courses/v51/scripts/code_mirror_bundle.js' %}"></script>
+        <script defer src="{% static 'courses/v51/scripts/practice_handler.js' %}"></script>
+        
+        <title>{% block title %} {{ title }} {% endblock %}</title>
+        <meta charset="utf-8">
+
+        <base target="_blank">
+        <script>
+            (() => {
+                function switch_to_dark() {
+                    document.documentElement.setAttribute('data-theme', "dark");
+                }
+
+                const theme_str = localStorage.getItem("theme");
+                if (theme_str && theme_str == "dark") {
+                    switch_to_dark();
+                    return;
+                }
+
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { // Try to get browser theme
+                    switch_to_dark();
+                    return;
+                }
+            })();
+        </script>
+    </head>
+    <body course_id="{{ course_id }}" status="{{ status }}">
+        <header>
+            <div class="center-div header-div">
+                <div class="header-left-div header-div">
+                    <div class="block">
+                        <object  type="image/svg+xml" data="{% static 'courses/v51/images/logo.svg' %}" class="header-img svg-item"  width="2.2rem" height="2.2rem"> </object>
+                    </div>
+                    <div class="block header-text">
+                        <a href="/" title="Senior Junior" target="_self" class="desktop-only">SenJun</a>
+                    </div>
+                </div>
+
+                <div class="header-div">
+                    <div class="block header-text-right">
+                        <a href="/courses" target="_self">Курсы</a>
+                    </div>
+                    <div class="block header-text-right">
+                        <a href="/playground" target="_self">Playground</a>
+                    </div>
+                    <div class="block header-text-right" onclick="switch_theme_click()">
+                        <i class="fa fa-solid fa-moon-o theme-switch-symbol" id="theme_switch_btn"></i>
+                    </div>
+                    <div class="block header-text-right">
+                        {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <div class="user-first-letter dropbtn noselect">
+                                {{ user.username|title|first }}
+                            </div>
+
+                            <div class="dropdown-content">
+                                <a href="/user" target="_self">Личный кабинет</a>
+                                <a href="/progress" target="_self">Прогресс</a>
+                                <a href="{% url 'account_logout' %}?next={{ request.path | urlencode }}" target="_self">Выход</a>
+                            </div>
+                        </div>
+                        {% else %}
+                            <div class="dropdown">
+                                <button class="btn-white" id="login-register" formtarget="_self">Вход</button>
+                                <div class="dropdown-content">
+                                    <a href="/login/" target="_self">Логин</a>
+                                    <a href="/signup/" target="_self">Регистрация</a>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="center-div">
+            <div class="breadcrumps">
+                <a href="/" target="_self">Главная</a> / <a href="/courses/" target="_self">Курсы</a> / <a href="/courses/{{ course_id }}" target="_self">{{ course_title }}</a> / {{ title }}
+            </div>
+            
+            <div class="list-item">
+                <div id="markdown-content" project_id="{{ project_id }}" class="chapter-content hidden">
+                {{ project_description }}
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-practice buttons-practice indent-medium shadow">
+            <button class="btn" title="Запустить юнит-тесты проекта" onclick="handle_project('test')" id="btn_test">
+                <i class="fa fa-solid fa-rocket"></i> <span class="desktop">Отправить на проверку </span>
+            </button>
+
+            <span class="margin-left-m comment">Аргументы командной строки</span>
+            <input type="text" id="cmd_line_args" name="Command line args" class="textedit margin-left-xsmall" placeholder="{{ default_cmd_line_args }}">
+
+            <button class="btn margin-left-xsmall"  title="F9" onclick="handle_project('run')" id="btn_run">
+                <i class="fa fa-solid fa-play"></i> <span class="desktop">Запустить</span>
+            </button>
+
+            <button class="btn-gray square margin-left-m" title="Сбросить решение" onclick="reset_solution()" id="btn_reset">
+                <i class="fa fa-solid fa-rotate-right"></i>
+            </button>
+
+            <button class="btn-gray square margin-left-small" title="Посмотреть подсказку" onclick="show_hint()">
+                <i class="fa fa-solid fa-question"></i>
+            </button>
+
+            <button class="btn-gray square margin-left-small" formtarget="_self" onclick="download_project()" title="Скачать проект">
+                <i class="fa fa-solid fa-download"></i>
+            </button>
+        </div>
+
+        <div class="project_parent bg-practice">
+            <div id="project_tree">
+                <span class="closebtn-tree hidden" onclick="toggle_left_menu()" id="open_left_menu"><i class="fa fa-solid fa-folder-open"></i></span>
+                <ul id="tree_ul"></ul>
+            </div>
+            <div id="project_files">
+                <div id="online_ide_container" class="flex-cont">
+                    <textarea id="online_ide" class="hidden"> </textarea>
+                </div>
+                <pre id="output_container">
+                </pre>
+            </div>
+        </div>
+
+
+        <div class="bg-practice buttons-practice">
+            {% if user.is_authenticated %}
+            <div id="progressBar" class="indent-medium">
+              <div id="barStatusText"></div>
+              <div id="barStatus"></div>
+            </div>
+            {% endif %}
+            <div class="indent-medium">
+              {% if 'chapter_' in next_chapter_id %}
+                <a href="/courses/{{ course_id }}/chapters/{{ next_chapter_id }}" class="btn-white" target="_self">
+              {% else %}
+                <a href="/courses/{{ course_id }}/practice/{{ next_chapter_id }}/" class="btn-white" target="_self">
+              {% endif %}
+                <i class="fa fa-chevron-right fa-fw"></i>
+                Дальше
+              </a>
+              <a href="/donation/" class="btn-vivid indent-left-small">
+                <i class="fa fa-heart fa-fw"></i>
+                <span class="desktop">Поддержать проект</span>
+              </a>
+            </div>
+        </div>
+        <span id="project_contents_raw" class="hidden"> {{ project_contents_raw }} </span>
+        <span id="project_contents_raw_default" class="hidden"> {{ project_contents_raw_default }} </span>
+        <div class="list-item">
+            <div id="feedback">
+              <form id="feedbackUploadForm" enctype="multipart/form-data" method="POST" action="/send_feedback/">
+              <div>
+                <textarea rows = "6" id="feedback_form" name="feedback_form" class="feedback_form" placeholder="Поделитесь фидбэком по проекту!"></textarea>
+              </div>
+              {% if user.is_authenticated == False %}
+              <div class="indent-small">
+                <input type="email" id="email" name="email" class="feedback_form" placeholder="E-mail для связи">
+              </div>
+              {% endif %}
+      
+              <div class="indent-small">
+                <input type="file" id="feedback_form_files" onchange="validateAttachments()" hidden multiple name="attachments"/>
+                <div class="indent-small">
+                  <label for="feedback_form_files" class="btn-gray"><i class="fa fa-solid fa-file"></i> Прикрепить файлы</label>
+                  <span id="feedback_form_files_count" class="indent-left-small smoky "></span>
+                  <span class="smoky vis_hid indent-left-xsmall pointer" id="del-attachments" onclick="del_attachments()"><i class="fa fa-solid fa-trash"></i></span>
+                </div>
+              </div>
+                <div class="indent-medium">
+                  <button class="btn-white" type="submit" name="submit" title="Отправить отзыв">
+                    <i class="fa fa-solid fa-paper-plane"></i>  Отправить фидбэк
+                  </button>
+                </div>
+                <div class="indent-small vis_hid" id="feedback_send_progress">
+                  <div class="loader"></div><div class="text-sender">Отправка...</div>
+                </div>
+                
+              </form>
+            </div>
+          </div>
+      
+          <div class="list-item list-item-dark">
+            <div class="center-div header-div">
+              <div class="header-left-div header-div">
+                  <div class="block">
+                      <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer" class="footer">
+                        <i class="fa fa-paper-plane fa-fw footer footer-img"></i></a>
+                  </div>
+                  <div class="block">
+                      <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer" class="footer">Наша группа в telegram.</a> <span class="">Здесь можно задавать вопросы и общаться.</span>
+                  </div>
+              </div>
+            </div>
+          <div class="center-div header-div indent-small">
+            <div class="header-left-div header-div">
+                <div class="block">
+                    <a href="/donation/" target="_blank" rel="noopener noreferrer" class="footer">
+                        <i class="fa fa-heart fa-fw  footer footer-img"></i></a>
+                </div>
+                <div class="block">
+                    <a href="/donation/" target="_blank" rel="noopener noreferrer" class="footer">Задонатить.</a> <span class="">Если вам нравится курс, вы можете поддержать развитие площадки!</span>
+                </div>
+            </div>
+          </div>
+        </div>
+        <footer>
+            <div class="center-div header-div">
+                <div class="header-left-div header-div">
+                    <div class="block">
+                        <a href="https://t.me/sen_jun_bot" target="_blank" rel="noopener noreferrer" class="footer">
+                            <img src="{% static 'courses/v51/images/bot.svg' %}" alt="SenJun Telegram Bot" class="footer-img"/>
+                        </a>
+                    </div>
+                    <div class="block">
+                        <a href="https://t.me/sen_jun_bot" target="_blank" rel="noopener noreferrer" class="footer">
+                            Бот для прохождения курсов
+                        </a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="center-div header-div indent-small">
+                <div class="header-left-div header-div">
+                    <div class="block">
+                        <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer" class="footer">
+                            <img src="{% static 'courses/v51/images/telegram.svg' %}" alt="SenJun Community Group" class="footer-img"/></a>
+                    </div>
+                    <div class="block">
+                        <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer" class="footer">Наше сообщество</a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="center-div header-div indent-small">
+                <div class="header-left-div header-div">
+                    <div class="block">
+                        <a href="https://github.com/senjun-team/senjun-courses" target="_blank" rel="noopener noreferrer" class="footer">
+                            <img src="{% static 'courses/v51/images/github.svg' %}" alt="SenJun on GitHub" class="footer-img"/></a>
+                    </div>
+                    <div class="block">
+                        <a href="https://github.com/senjun-team/senjun-courses" target="_blank" rel="noopener noreferrer" class="footer">Проект на GitHub</a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="center-div header-div indent-small">
+                <div class="header-left-div header-div">
+                    <div class="block">
+                        <a href="mailto: team@senjun.ru" class="footer">
+                            <i class="fa fa-envelope fa-fw  footer footer-img"></i></a>
+                    </div>
+                    <div class="block">
+                        <a href="mailto: team@senjun.ru" class="footer">
+                            team@senjun.ru
+                        </a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="center-div header-div indent-small">
+                <div class="header-left-div header-div">
+                    <div class="block">
+                        <a href="/donation/" target="_blank" rel="noopener noreferrer" class="footer">
+                            <i class="fa fa-heart fa-fw  footer footer-img"></i></a>
+                    </div>
+                    <div class="block">
+                        <a href="/donation/" target="_blank" rel="noopener noreferrer" class="footer">Поддержать проект</a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="center-div header-div indent-large">
+                <div class="header-left-div header-div">
+                    <div class="block light-gray left-padding-mobile">
+                        © 2024, SenJun<br>
+                        <a href="/terms_of_use/" target="_blank" rel="noopener noreferrer" class="white"> Условия использования</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <div class="modal" id="modal_overlay">
+            <div class="modal-content">
+                <span class="close" onclick="close_modal()">&times;</span>
+                <div class="padding-top-small">
+                    <h3 class="title-modal">Подсказка</h3>
+                    <div id="hint_text" class="hidden">
+                        {{ project_hint }}
+                    </div>
+                    <div class="indent-medium">
+                        <p>
+                        <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer"><i class="fa fa-solid fa-telegram main-icon"></i> Задать вопрос.</a><br/>
+                    </p><p class="indent-small">
+                        <a href="https://github.com/senjun-team/senjun-courses/tree/main/{{ course_id }}/practice/{{ project_id }}/project_solution/" target="_blank" rel="noopener noreferrer"><i class="fa fa-solid fa-github main-icon"></i> Посмотреть полное решение.</a>
+                    </p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="modal_overlay_reset">
+            <div class="modal-content">
+                <span class="close" onclick="close_modal_reset()">&times;</span>
+                <div class="padding-top-small">
+                    <h3 class="title-modal">Сброс решения</h3>
+                    <div>
+                        Сброс решения приведет к потере всех ваших изменений в этом проекте. Вы уверены?
+                    </div>
+                    <div class="indent-medium">
+                        <button class="btn" title="Да" onclick="reset_project_contents()">
+                            Да
+                        </button>
+
+                        <button class="btn margin-left-small" title="Нет" onclick="close_modal_reset()">
+                            Нет
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="modal_overlay_complete">
+            <div class="modal-content">
+                <span class="close" onclick="close_modal_complete()">&times;</span>
+                <div class="padding-top-small">
+                    <h3 class="title-modal"><i class="fa fa-solid fa-star"></i> Все тесты пройдены!</h3>
+                    <div>
+                        Поздравляем, все тесты пройдены. Вы успешно выполнили проект!
+                    </div>
+                    <div class="indent-medium">
+                        <p>
+                        <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer"><i class="fa fa-solid fa-telegram main-icon"></i> Обсудить проект.</a><br/>
+                    </p><p class="indent-small">
+                        <a href="https://github.com/senjun-team/senjun-courses/tree/main/{{ course_id }}/practice/{{ project_id }}/project_solution/" target="_blank" rel="noopener noreferrer"><i class="fa fa-solid fa-github main-icon"></i> Посмотреть наш вариант решения.</a>
+                    </p></div>
+                    <div class="indent-medium">
+                        {% if 'chapter_' in next_chapter_id %}
+                        <a href="/courses/{{ course_id }}/chapters/{{ next_chapter_id }}" class="btn" target="_self">
+                      {% else %}
+                        <a href="/courses/{{ course_id }}/practice/{{ next_chapter_id }}/" class="btn" target="_self">
+                      {% endif %}
+            
+                        <i class="fa fa-chevron-right fa-fw"></i>
+                        К новой главе
+                      </a>
+
+                        <button class="btn margin-left-small" title="Нет" onclick="close_modal_complete()">
+                            Остаться
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

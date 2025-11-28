@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Курсы по программированию{% endblock %}
+
+{% block content %}
+  <div class="breadcrumps">
+    <a href="/" target="_self">Главная</a> / Курсы
+  </div>
+  <h1>Курсы</h1>
+  {% for course in courses_list %}
+  <div class="list-item">
+    <div style="display: table;height: 100%;">
+      <div class="block course-header">
+        <object  type="image/svg+xml" data="{% static "courses/v51/images/" %}{{ course.course_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
+      </div>
+      <div class="block course-header left-padding">
+        <h1 class="no-margin"><a href="{% url 'course' course.course_id %}" target="_self">{{ course.title }}</a></h1>
+      </div>
+    </div>
+
+    <div>
+    {{ course.description|linebreaks }}
+    </div>
+
+    <div class="text-about text-small indent-small">
+      На этом языке написаны:
+    </div>
+    <div>
+      {% for project in course.tags.projects %}
+      <div class="chips block text-about text-small">
+        <a href="{{project.url}}" target="_blank" rel="noopener noreferrer" class="smoky">{{ project.name }}</a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-about text-small indent-small">
+      {% if course.tags.tasks %}
+      Вас ждут:
+      {% else %}
+      Вас ждет:
+      {% endif %}
+    </div>
+    <div>
+      <div class="chips block text-small"><a href="{{course.tags.url}}" target="_blank" rel="noopener noreferrer" class="smoky">{{ course.tags.version }}</a></div>
+      {% if course.tags.tasks %}
+        {% if course.tags.chapters %}<div class="chips block text-small"><a href="{% url 'course' course.course_id %}" target="_self" class="smoky">{{ course.tags.chapters }}</a></div>{% endif %}
+          <div class="chips block text-small"><a href="{% url 'course' course.course_id %}" target="_self" class="smoky">{{ course.tags.tasks }}</a></div>
+          {% if course.tags.practice_projects %}<div class="chips block text-small"><a href="{% url 'course' course.course_id %}" target="_self" class="smoky">{{ course.tags.practice_projects }}</a></div>{% endif %}
+      {% endif %}
+    </div>
+
+
+    <div>
+      <div class="text-about text-small indent-small">
+        {% if course.tags.authors|length > 1 %}
+           Авторы:
+        {% else %}
+           Автор:
+        {% endif %}
+      </div>
+      <div class="text-about text-small indent-small author-container">
+          {% for author in course.tags.authors %}
+              <img src="{% static "courses/v51/images/authors/" %}{{ author.author }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+              <span class="margin-horisontal-small"><a href="/authors/{{ author.author }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
+          {% endfor %}
+      </div>
+
+      {% if course.tags.edited_by|length > 0 %}
+        <div class="text-about text-small indent-small">
+          Под редакцией:
+        </div>
+        <div class="text-about text-small indent-small author-container">
+          {% for author in course.tags.edited_by %}
+              <img src="{% static "courses/v51/images/authors/" %}{{ author.edited_by }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+              <span class="margin-horisontal-small"><a href="/authors/{{ author.edited_by }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="indent-medium">
+      {% if user.is_authenticated %}
+          {% if course.status == 'not_started' %}
+            <a href="/courses/{{course.course_id}}/start_course/" class="btn-white">
+              <i class="fa fa-play fa-fw"></i>
+              Начать
+            </a>
+          {% else %}
+            {% if course.status == 'in_progress' %}
+              <a href="/courses/{{course.course_id}}/current_chapter/" class="btn-white" target="_self">
+                <i class="fa fa-chevron-right fa-fw"></i>
+                Продолжить
+              </a>
+            {% else %}
+                {% if course.status == 'completed' %}
+                <h1 class="info-block">
+                  <i class="fa fa-solid fa-star"></i> Курс успешно завершен
+                </h1>
+                {% endif %}
+            {% endif %}
+          {% endif %}
+
+      {% else %}
+        <a href="/login/?next=/courses/{{course.course_id}}/start_course/" class="btn-white" target="_self">
+          <i class="fa fa-play fa-fw"></i>
+          Начать
+        </a>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}

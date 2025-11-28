@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% load socialaccount %}
+{% block title %}Вход на сайт{% endblock %}
+{% block content %}
+
+<h1>Вход на сайт</h1>
+
+{% if user.is_authenticated == False %}
+  {% if request.GET.action == "run_task" %}
+    <div class="list-item info">
+      Для запуска задачи нужно залогиниться.<br/><br/>Нам это поможет защититься от части атак на бэкенд, а пользователям — сохранять решения задач и вести прогресс по курсу.
+    </div>
+  {% endif %}
+{% endif %}
+
+<div class="list-item">
+  <div class="text-about form-label">
+    С помощью сервиса
+  </div>
+  <div>
+    <a target="_self" href="{% provider_login_url "telegram" %}"><img src="{% static 'courses/v51/images/telegram.png' %}" alt="Telegram" class="icon-login-social"/></a>
+    <a target="_self" href="{% provider_login_url "vk" %}"><img src="{% static 'courses/v51/images/vk.png' %}" alt="VK" class="icon-login-social"/></a>
+    <a target="_self" href="{% provider_login_url "yandex" %}"><img src="{% static 'courses/v51/images/yandex.png' %}" alt="Яндекс" class="icon-login-social"/></a>
+  </div>
+<form method="post" novalidate>  
+  {% csrf_token %}  
+    <input type="hidden" name="next" value="{{ request.GET.next }}" />
+    {% for field in form %}  
+    <p>  
+      <p class="text-about form-label">
+        {{ field.label_tag }} 
+      </p> 
+      {{ field }}  
+      {% if field.help_text %}  
+        <small style="display: none ">{{ field.help_text }}</small>  
+      {% endif %}  
+      {% for error in field.errors %}  
+        <p class="alert-primary">{{ error }}</p>  
+      {% endfor %}  
+    </p>  
+    {% endfor %}  
+
+    {% for error in form.non_field_errors %}  
+    <p class="alert-primary">{{ error }}</p>  
+    {% endfor %} 
+
+    
+    <div class="indent-medium">
+      <button type="submit" class="btn" formtarget="_self">Войти</button> 
+    </div>
+    <div class="indent-medium">
+      <a href="/signup/" class="btn-white" target="_self">Зарегистрироваться</a>
+    </div>
+   
+</form>  
+<div class="indent-medium">
+<p><a href="{% url 'account_reset_password' %}" target="_self">Не помните пароль?</a></p>
+</div>
+</div>
+
+{% endblock %}

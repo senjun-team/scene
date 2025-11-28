@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+  {{ tasks|json_script:"user_task_solutions" }}
+
+  <div class="wrapper-contents-list">
+    <div class="contents-list" onclick="toggleContents()">
+      <i class="fa fa-solid fa-list-alt main-icon chapter-contents-icon"></i>
+    </div>
+  </div>
+  <div class="breadcrumps">
+    <a href="/" target="_self">Главная</a> / 
+    <a href="/courses/" target="_self">Курсы</a> / 
+    <a href="/courses/{{ course_id }}" target="_self">{{ course_title }}</a> / 
+    {% if parent_chapter_id and parent_chapter_title %}
+    <a href="/courses/{{ course_id }}/chapters/{{ parent_chapter_id }}" target="_self">{{ parent_chapter_title }}</a> / 
+    {% endif %}
+    {{ title }}
+  </div>
+
+    <div class="list-item">
+
+      <div id="markdown-content" chapter_id="{{ chapter_id }}" class="chapter-content">
+        {{ content }}
+      </div>
+
+      {% if user.is_authenticated %}
+      <div id="progressBar" class="indent-medium">
+        <div id="barStatusText"></div>
+        <div id="barStatus"></div>
+      </div>
+      {% endif %}
+
+      <div class="indent-medium">
+        {% if next_chapter_id %}
+        <div>
+          {% if 'chapter_' in next_chapter_id %}
+            <a href="/courses/{{ course_id }}/chapters/{{ next_chapter_id }}" class="btn-white" target="_self">
+          {% else %}
+            <a href="/courses/{{ course_id }}/practice/{{ next_chapter_id }}/" class="btn-white" target="_self">
+          {% endif %}
+            <i class="fa fa-chevron-right fa-fw"></i>
+            Дальше
+          </a>
+          <a href="/donation/" class="btn-vivid indent-left-small">
+            <i class="fa fa-heart fa-fw"></i>
+            <span class="desktop-only">Поддержать проект</span>
+          </a>
+        </div>
+        {% else %}
+            {% if course_status == 'completed' %}
+              <h1 class="info-block indent-medium">
+                <i class="fa fa-solid fa-star"></i> Курс успешно завершен
+              </h1>
+              <a href="/donation/" class="btn-vivid indent-left-small">
+                <i class="fa fa-heart fa-fw"></i>
+                <span class="desktop-only">Поддержать проект</span>
+              </a>
+            {% else %}
+              {% if in_development %}
+                <h1 class="info-block indent-medium">
+                  <i class="fa fa-pencil fa-fw"></i> Следующие главы находятся в разработке
+                </h1>
+              {% else %}
+                  <button class="btn-white" formtarget="_self" onclick="finish_course(true)" disabled id="btn_finish_course" title="Чтобы завершить курс, нужно пройти эту главу">
+                    <i class="fa fa-solid fa-star"></i> Завершить курс
+                  </button>
+              {% endif %}
+            {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="list-item">
+      <div id="feedback">
+        <form id="feedbackUploadForm" enctype="multipart/form-data" method="POST" action="/send_feedback/">
+        <div>
+          <textarea rows = "6" id="feedback_form" name="feedback_form" class="feedback_form" placeholder="Поделитесь фидбэком по главе!"></textarea>
+        </div>
+        {% if user.is_authenticated == False %}
+        <div class="indent-small">
+          <input type="email" id="email" name="email" class="feedback_form" placeholder="E-mail для связи">
+        </div>
+        {% endif %}
+
+        <div class="indent-small">
+          <input type="file" id="feedback_form_files" onchange="validateAttachments()" hidden multiple name="attachments"/>
+          <div class="indent-small">
+            <label for="feedback_form_files" class="btn-gray"><i class="fa fa-solid fa-file"></i> Прикрепить файлы</label>
+            <span id="feedback_form_files_count" class="indent-left-small smoky "></span>
+            <span class="smoky vis_hid indent-left-xsmall pointer" id="del-attachments" onclick="del_attachments()"><i class="fa fa-solid fa-trash"></i></span>
+          </div>
+        </div>
+          <div class="indent-medium">
+            <button class="btn-white" type="submit" name="submit" title="Отправить отзыв">
+              <i class="fa fa-solid fa-paper-plane"></i>  Отправить фидбэк
+            </button>
+          </div>
+          <div class="indent-small vis_hid" id="feedback_send_progress">
+            <div class="loader"></div><div class="text-sender">Отправка...</div>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+
+    <div class="list-item list-item-dark">
+      <div class="center-div header-div">
+        <div class="header-left-div header-div">
+            <div class="block">
+                <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer" class="footer">
+                  <i class="fa fa-paper-plane fa-fw footer footer-img"></i></a>
+            </div>
+            <div class="block">
+                <a href="https://t.me/senjun_feedback" target="_blank" rel="noopener noreferrer" class="footer">Наша группа в telegram.</a> <span class="">Здесь можно задавать вопросы и общаться.</span>
+            </div>
+        </div>
+      </div>
+    <div class="center-div header-div indent-small">
+      <div class="header-left-div header-div">
+          <div class="block">
+              <a href="/donation/" target="_blank" rel="noopener noreferrer" class="footer">
+                  <i class="fa fa-heart fa-fw  footer footer-img"></i></a>
+          </div>
+          <div class="block">
+              <a href="/donation/" target="_blank" rel="noopener noreferrer" class="footer">Задонатить.</a> <span class="">Если вам нравится курс, вы можете поддержать развитие площадки!</span>
+          </div>
+      </div>
+    </div>
+  </div>
+    
+
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{
+	"anna_bekker": {
+		"full_name": "Анна Беккер",
+		"email": "kluchnikovaanna@gmail.com",
+		"short_description": "Senior backend developer",
+		"courses": [{"course_id": "rust", "course_title": "Rust"}],
+		"full_description": "Работала в нефтегазовой области г. Иннополис, в Рамблер/Рекламе, Рамблер/Медиа. В данный момент разработчик в VK ОРД.<br/><br/>В свободное время играю в волейбол и разрабатываю телеграм-бота для Senior Junior."
+	},
+	 "vladimir_khatskevich": {
+	 	"full_name": "Владимир Хацкевич",
+		"email": "khvaonline@gmail.com",
+		"short_description": "Principal software engineer",
+		"courses": [{"course_id": "rust", "course_title": "Rust"}, {"course_id": "cpp", "course_title": "C++ по спирали"}],
+		"full_description": "Программист с 30-летним опытом разработки. Помнит ламповые ЭВМ, перфокарты, FORTRAN IV, освоение огня и динозавров.<br/><br/>Последние 10 лет занимается server-side разработкой. Предпочитает компилируемые языки программирования. Считает динамическую типизацию худшим техническим решением за всё время существования IT."
+	},
+	"dmitriy_shipilov": {
+		"full_name": "Дмитрий Шипилов",
+		"email": "shipilovdmitryvaler@gmail.com",
+		"short_description": "C++ teamlead",
+		"courses": [{"course_id": "python", "course_title": "Python"}],
+		"full_description": "Магистр информатики и вычислительной техники. Проектировал и изготавливал электронное оборудование для научных работ. Занимался разработкой ПО для анализа спутниковых систем связи. Сейчас разрабатываю общие компоненты навигатора для мобильных платформ внутри VK.<br/><br/>Люблю людей, делиться опытом и open source."	
+	},
+	"olga_khlopkova": {
+		"full_name": "Ольга Хлопкова",
+		"email": "mesozoic.drones@gmail.com",
+		"short_description": "Server-side teamlead",
+		"courses": [{"course_id": "python", "course_title": "Python"}, {"course_id": "cpp", "course_title": "C++ по спирали"}],
+		"full_description": "10 лет в server-side разработке. По образованию математик-программист, кандидат технических наук. Работала над такими проектами как Рамблер/Поиск, MAPS.ME, VK Карты.<br/><br/>В свободное время развиваю площадку Senior Junior."	
+	},
+	"denis_shevchenko": {
+		"full_name": "Денис Шевченко",
+		"email": "denis@shevchenko.site",
+		"short_description": "Founder of the ruHaskell community",
+		"courses": [{"course_id": "haskell", "course_title": "Haskell"}],
+		"full_description": "В прошлом - С++-программист. В настоящем - апологет функционального программирования, сооснователь сообщества <a href='https://ruhaskell.org/' target='_blank' rel='noopener noreferrer'>ruHaskell,</a> практикующий Haskell-программист.<br/><br/>Тружусь в компании IOHK, участвую в создании первой (и пока единственной) криптовалютной системы, написанной на Haskell."
+	},
+	"vyacheslav_korepanov": {
+		"full_name": "Вячеслав Корепанов",
+		"email": "korepanov.viacheslav@gmail.com",
+		"short_description": "Golang developer",
+		"courses": [{"course_id": "golang", "course_title": "Golang"}],
+		"full_description": "Закончил магистратуру по специальности «Информационные системы и технологии». Лауреат премии РАН 2023 года за лучшую научную работу в области информационных систем и технологий.<br/><br/>В свободное время занимается написанием курсов для площадки Senior Junior, а также развитием группы по разработке <a href='https://vk.com/repaschool' target='_blank' rel='noopener noreferrer'>Репаскул.</a>"
+	},
+	"dmitry_churin": {
+		"full_name": "Дмитрий Чурин",
+		"email": "ziexe0@gmail.com",
+		"short_description": "T-shaped developer",
+		"courses": [{"course_id": "haskell", "course_title": "Haskell"}],
+		"full_description": "В разработке с 2013 года. Пишет на чем скажут и что скажут. Занимался разработкой бекенда, фронтенда, настройкой CI, обучением и управлением команды — всего понемногу.<br/><br/>Фанат функционального программировая, стройки и экстримальных видов спорта. Считает, «что выгорело, то выгореть не может»."
+	},
+	"anton_holomyov": {
+		"full_name": "Антон Холомьёв",
+		"email": "",
+		"short_description": "Senior backend developer",
+		"courses": [{"course_id": "haskell", "course_title": "Haskell"}],
+		"full_description": "Специалист в области функционального программирования. В Haskell c 2009 года. Разрабатывал под самые разные задачи: бэк фронт, ml, crypto, финтех.<br/><br/>Увлекаюсь сочинением музыки, этническими духовыми, йогой и opensource.<br/><br/>Из наиболее интересных Haskell проектов: написал библиотеку для создания музыки и кодом csound-expression, минималистичный веб-фреймворк <a href='https://github.com/anton-k/mig' target='_blank' rel='noopener noreferrer'>mig,</a> библиотеки для реактивного программирования  dyna, анимации <a href='https://github.com/anton-k/processing-for-haskell' target='_blank' rel='noopener noreferrer'>processing-for-haskell.</a>"
+	}
+}
