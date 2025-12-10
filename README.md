@@ -27,7 +27,7 @@ pip3 install -r requirements.txt
 
 ```bash
 cd scene
-cp conf-template conf.json
+cp conf-template.json conf.json
 ```
 
 Внутри `conf.json` как минимум нужно задать свой пароль для бд, с которой работает проект. В отладочных целях другие поля кастомизировать не обязательно.
