@@ -11,18 +11,18 @@
         <meta name="keywords" content="{{ lang_title }} online, {{ lang_title }} playground, {{ lang_title }} онлайн">
 
         <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
-        <link rel="stylesheet" href="{% static 'courses/v51/styles/font-awesome/4.7.0/font-awesome.min.css' %}">
+        <link rel="stylesheet" href="{% static 'courses/v52/styles/font-awesome/4.7.0/font-awesome.min.css' %}">
 
-        <meta property="og:image" content="{% static 'courses/v51/images/logo.png' %}" />
+        <meta property="og:image" content="{% static 'courses/v52/images/logo.png' %}" />
         <meta property="og:locale" content="ru_RU">
 	    <meta property="og:type" content="website"/>
-        <script src="{% static 'courses/v51/scripts/header_handler.js' %}"></script>
+        <script src="{% static 'courses/v52/scripts/header_handler.js' %}"></script>
         
-        <link rel="stylesheet" href="{% static 'courses/v51/playground.css' %}">
-        <script src="{% static 'courses/v51/scripts/ansi_up.js' %}" type="text/javascript"></script>
-        <script defer src="{% static 'courses/v51/scripts/code_mirror_bundle.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'courses/v52/playground.css' %}">
+        <script src="{% static 'courses/v52/scripts/ansi_up.js' %}" type="text/javascript"></script>
+        <script defer src="{% static 'courses/v52/scripts/code_mirror_bundle.js' %}"></script>
         
-        <script defer src="{% static 'courses/v51/scripts/playground_handler.js' %}"></script>
+        <script defer src="{% static 'courses/v52/scripts/playground_handler.js' %}"></script>
 
 
         <title>{% block title %}{{ lang_title }} playground. Online {{ lang_title }} IDE.{% endblock %}</title>
@@ -80,13 +80,13 @@
     <body playground_lang_id="{{ lang_id }}" playground_id="{{ playground_id }}">
         <div class="menu menu_container">
             <a href="/" title="Senior Junior" target="_self">
-            <object  type="image/svg+xml" data="{% static 'courses/v51/images/logo.svg' %}" class="header-img svg-item margin-left-xsmall object-link" width="30" height="30"> </object>
+            <object  type="image/svg+xml" data="{% static 'courses/v52/images/logo.svg' %}" class="header-img svg-item margin-left-xsmall object-link" width="30" height="30"> </object>
             </a>
             <a href="/" title="Senior Junior" target="_self" class="margin-left-xsmall desktop">SenJun</a>
             <span class="menu-slash desktop">/</span>
             <a href="/playground" title="Playgrounds" target="_self">Playground</a>
             <span class="menu-slash">/</span>
-            <object type="image/svg+xml" data="{% static "courses/v51/images/" %}{{ lang_id }}.svg" class="svg-item course-img desktop" width="30" height="30"></object>
+            <object type="image/svg+xml" data="{% static "courses/v52/images/" %}{{ lang_id }}.svg" class="svg-item course-img desktop" width="30" height="30"></object>
             <span class="margin-left-xsmall menu-text">{{ lang_title }}</span>
 
             <form id="runCodeForm" enctype="multipart/form-data" method="POST" action="/run_code/">
