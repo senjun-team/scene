@@ -663,6 +663,18 @@ header {
     border: 2px solid var(--color-light-item);
 }
 
+.left-icon {
+    width: 1.8em !important;
+}
+
+.milestone-item {
+    border: 2px transparent !important;
+}
+
+.milestone-icon {
+    color: #0789d9;
+}
+
 .list-item {
     border-radius: 10px;
     border: 2px solid var(--list-item-border);
@@ -787,7 +799,7 @@ a.footer:link {
 a.footer:visited {
     color: var(--color-highlight);
 }
-  
+
 a.footer:hover {
     color: var(--color-highlight-intensive);
 }
