@@ -372,17 +372,32 @@ def course(request, course_id):
             return redirect("/error")
         tags = json.loads(tags["tags"])
         in_development = tags.get("in_development", False)
+        tags["authors"] = [a for a in settings.COURSE_AUTHORS[course_id] if a.get("author") is not None]
+        tags["edited_by"] = [a for a in settings.COURSE_AUTHORS[course_id] if a.get("edited_by") is not None]
 
         for chapter in res:
             chapter["title"] = chapter["title"].replace("Глава ", "")
 
         chapters = build_subchapters_hierarchy(res)
         
+        course = {}
+        if user_id is not None:
+            res = c.post_request("course_stats", {"course_id": course_id}, {"user_id": user_id})
+            if res is not None and "error" not in res and len(res) > 0:
+                course = res[0]
+                calc_progress(course)
+
+        res = c.post_request("get_course_description", {"course_id": course_id}, {})
+        if "description" in res:
+            tags["description"] = res["description"]
+
         context = {
             "chapters_list": chapters,
             "course_id": course_id,
             "course_title": tags.get("title", course_id.capitalize()),
             "in_development": in_development,
+            "course": course,
+            "tags": tags
         }
 
         return render(request, "course/index.html", context)
@@ -733,6 +748,23 @@ def delete_account(request):
     return render(request, "delete_account.html", context)
 
 
+def calc_progress(course):
+    if (t := course.get("total_chapters", 0)) > 0:
+        course["chapters_pct"] = int(course["finished_chapters"] * 100 / t)
+    else:
+        course["chapters_pct"] = 0
+
+    if (t := course.get("total_tasks", 0)) > 0:
+        course["tasks_pct"] = int(course["finished_tasks"] * 100 / t)
+    else:
+        course["tasks_pct"] = 0
+
+    if (t := course.get("total_projects", 0)) > 0:
+        course["projects_pct"] = int(course["finished_projects"] * 100 / t)
+    else:
+        course["projects_pct"] = 0
+
+
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def progress(request):
@@ -748,20 +780,7 @@ def progress(request):
         return redirect ("/error")
 
     for course in res:
-        if (t := course.get("total_chapters", 0)) > 0:
-            course["chapters_pct"] = int(course["finished_chapters"] * 100 / t)
-        else:
-            course["chapters_pct"] = 0
-
-        if (t := course.get("total_tasks", 0)) > 0:
-            course["tasks_pct"] = int(course["finished_tasks"] * 100 / t)
-        else:
-            course["tasks_pct"] = 0
-
-        if (t := course.get("total_projects", 0)) > 0:
-            course["projects_pct"] = int(course["finished_projects"] * 100 / t)
-        else:
-            course["projects_pct"] = 0
+        calc_progress(course)
 
         if course["status"] == "in_progress":
             courses_in_progress.append(course)
