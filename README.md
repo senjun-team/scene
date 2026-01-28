@@ -53,6 +53,7 @@ CREATE USER scene WITH password 'scene';
 ALTER ROLE scene SET client_encoding TO 'utf8';
 ALTER ROLE scene SET default_transaction_isolation TO 'read committed';
 ALTER ROLE scene SET timezone TO 'UTC';
+ALTER DATABASE scene OWNER TO scene;
 GRANT ALL PRIVILEGES ON DATABASE scene TO scene;
 ```
 
