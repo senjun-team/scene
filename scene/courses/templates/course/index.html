@@ -9,7 +9,7 @@
   </div>
   <div style="display: table;height: 100%;" class="MarginBottom">
     <div class="block course-header">
-      <object type="image/svg+xml" data="{% static "courses/v52/images/" %}{{ course_id }}.svg" class="svg-item course-img" width="30" height="30"> </object>
+      <object type="image/svg+xml" data="{% static "courses/v53/images/" %}{{ course_id }}.svg" class="svg-item course-img" width="30" height="30"> </object>
     </div>
     <div class="block course-header left-padding">
       <h1 class="no-margin">{{ course_title }}</h1>
@@ -70,7 +70,7 @@
       </div>
       <div class="text-about text-small indent-small author-container">
           {% for author in tags.authors %}
-              <img src="{% static "courses/v52/images/authors/" %}{{ author.author }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+              <img src="{% static "courses/v53/images/authors/" %}{{ author.author }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
               <span class="margin-horisontal-small"><a href="/authors/{{ author.author }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
           {% endfor %}
       </div>
@@ -81,7 +81,7 @@
         </div>
         <div class="text-about text-small indent-small author-container">
           {% for author in tags.edited_by %}
-              <img src="{% static "courses/v52/images/authors/" %}{{ author.edited_by }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+              <img src="{% static "courses/v53/images/authors/" %}{{ author.edited_by }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
               <span class="margin-horisontal-small"><a href="/authors/{{ author.edited_by }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
           {% endfor %}
         </div>
