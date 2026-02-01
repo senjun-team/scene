@@ -380,7 +380,7 @@ function openPlaygroundResult(response) {
     return;
   }
 
-  const err = '<p>Не удалось открыть playground с этим кодом. Пожалуйста, повторите попытку позже.</p>' + bugreport_text;
+  const err = '<p>Не удалось открыть песочницу с этим кодом. Пожалуйста, повторите попытку позже.</p>' + bugreport_text;
   showModal("Ошибка", err);
   if (playgroundTab) {
     playgroundTab.close();
@@ -606,7 +606,7 @@ function addCodeBlock(elem_id, is_read_only, text = "", taskStatus = "") {
 
         let btnPlayground = document.createElement('button');
         btnPlayground.innerHTML = svgPlayground;
-        btnPlayground.title = "Открыть в Playground";
+        btnPlayground.title = "Открыть в песочнице";
         btnPlayground.classList.add('btn-white');
         btnPlayground.classList.add('square');
         btnPlayground.classList.add('btn_example_for_playground');
@@ -697,7 +697,7 @@ function addCodeBlock(elem_id, is_read_only, text = "", taskStatus = "") {
         if (lang !== "consoleoutput") {
           let btnPlayground = document.createElement('button');
           btnPlayground.innerHTML = svgPlayground;
-          btnPlayground.title = "Открыть в Playground";
+          btnPlayground.title = "Открыть в песочнице";
           btnPlayground.classList.add('btn-gray');
           btnPlayground.classList.add('square');
           btnPlayground.classList.add('indent-left');

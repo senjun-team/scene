@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Playground{% endblock %}
+{% block title %}Песочница{% endblock %}
 
 {% block content %}
   <div class="breadcrumps">
-    <a href="/" target="_self">Главная</a> / Playground
+    <a href="/" target="_self">Главная</a> / Песочница
   </div>
-  <h1>Playground</h1>
+  <h1>Песочница</h1>
   <p>Выберите язык, чтобы открыть online IDE.</p>
   {% for p in playgrounds_list %}
   <div class="list-item">
     <div style="display: table;height: 100%;">
       <div class="block course-header">
-        <object  type="image/svg+xml" data="{% static "courses/v53/images/" %}{{ p.lang_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
+        <object  type="image/svg+xml" data="{% static "courses/v54/images/" %}{{ p.lang_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
       </div>
       <div class="block course-header left-padding">
         <h1 class="no-margin"><a href="{% url 'playground' p.lang_id %}" target="_self">{{ p.title }}</a></h1>
