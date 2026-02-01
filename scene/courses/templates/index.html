@@ -32,7 +32,7 @@
       <div class="list-item">
         <div style="display: table;height: 100%;">
           <div class="block course-header">
-            <object  type="image/svg+xml" data="{% static "courses/v53/images/" %}{{ course.course_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
+            <object  type="image/svg+xml" data="{% static "courses/v54/images/" %}{{ course.course_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
           </div>
           <div class="block course-header left-padding">
             <h1 class="no-margin"><a href="{% url 'course' course.course_id %}" target="_self">{{ course.title }}</a></h1>
@@ -80,7 +80,7 @@
           </div>
           <div class="text-about text-small indent-small author-container">
               {% for author in course.tags.authors %}
-                  <img src="{% static "courses/v53/images/authors/" %}{{ author.author }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+                  <img src="{% static "courses/v54/images/authors/" %}{{ author.author }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
                   <span class="margin-horisontal-small"><a href="/authors/{{ author.author }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
               {% endfor %}
           </div>
@@ -91,7 +91,7 @@
             </div>
             <div class="text-about text-small indent-small author-container">
               {% for author in course.tags.edited_by %}
-                  <img src="{% static "courses/v53/images/authors/" %}{{ author.edited_by }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+                  <img src="{% static "courses/v54/images/authors/" %}{{ author.edited_by }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
                   <span class="margin-horisontal-small"><a href="/authors/{{ author.edited_by }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
               {% endfor %}
             </div>
