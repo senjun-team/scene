@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Playground{% endblock %}
+{% block title %}Песочница{% endblock %}
 
 {% block content %}
   <div class="breadcrumps">
-    <a href="/" target="_self">Главная</a> / Playground
+    <a href="/" target="_self">Главная</a> / Песочница
   </div>
-  <h1>Playground</h1>
+  <h1>Песочница</h1>
   <p>Выберите язык, чтобы открыть online IDE.</p>
   {% for p in playgrounds_list %}
   <div class="list-item">
