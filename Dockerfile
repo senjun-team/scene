@@ -10,6 +10,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY scene/ /app/scene/
+COPY conf.json /app/scene
 
 WORKDIR /app/scene
 
