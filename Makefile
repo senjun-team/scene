@@ -3,8 +3,9 @@ export DJANGO_SETTINGS_MODULE=scene.settings_dev
 manage := uv run ./scene/manage.py
 
 init: scene/conf.json
-	mkdir -p staticfiles/courses/{authors,default_projects}
+	mkdir -p staticfiles/courses/authors
 	cp ./scene/courses/static/courses/authors/courses.json staticfiles/courses/authors/courses.json
+	cp -r ./scene/courses/static/courses/default_projects/ staticfiles/courses/
 	$(manage) migrate
 	$(manage) runserver
 
