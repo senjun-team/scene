@@ -23,7 +23,11 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-project --no-dev
 
+
+
 COPY scene/ /app/scene
+RUN uv run python /app/scene/manage.py collectstatic --no-input
+
 
 FROM python:3.13-slim-bookworm
 
@@ -37,12 +41,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN groupadd --system --gid 999 scene \
  && useradd --system --gid 999 --uid 999 scene
 
+COPY --from=builder --chown=scene:scene /app/staticfiles /app/scene/staticfiles
 COPY --from=builder --chown=scene:scene /app /app
-
-#NOTE: нужно только потому, что они по конфигу ищутся в статике
-RUN mkdir -p /app/scene/staticfiles/courses/authors \
- && mkdir -p /app/scene/staticfiles/courses/default_projects
-COPY --chown=scene:scene scene/courses/static/courses/authors/courses.json /app/scene/staticfiles/courses/authors/courses.json
 
 ENV PATH="/app/.venv/bin:$PATH"
 
@@ -50,6 +50,6 @@ USER scene
 
 WORKDIR /app/scene
 
-EXPOSE 8000
+EXPOSE 80
 
 ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "3", "scene.wsgi:application"]

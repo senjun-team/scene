@@ -1,4 +1,5 @@
 import logging
+import os
 import requests
 import json
 from django.utils.timezone import now
@@ -11,7 +12,7 @@ import scene.settings as settings
 
 def post_request(api, body, params):
     # handyman url:
-    url = "http://localhost:8080/" + api
+    url = os.environ.get("HANDYMAN_URL", "http://localhost:8080/") + api
     try:
         res = requests.post(url, params=params, json=body)
         if not res.ok:
