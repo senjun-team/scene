@@ -1,7 +1,5 @@
 .PHONY: image init
 
-export DJANGO_SETTINGS_MODULE=scene.settings_dev
-
 manage := uv run ./scene/manage.py
 
 init: scene/conf.json
