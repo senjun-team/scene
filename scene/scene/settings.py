@@ -17,11 +17,14 @@ import os.path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-def read_json_from_file(filepath):
+def read_json_from_file(filepath, notexists_ok=False):
+    if notexists_ok and not Path(filepath).exists():
+        return {}
+
     with open(filepath, "r") as f:
         return json.load(f)
 
-conf = read_json_from_file( str(BASE_DIR / "conf.json") )
+conf = read_json_from_file( str(BASE_DIR / "conf.json"), True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
