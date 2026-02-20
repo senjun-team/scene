@@ -4,7 +4,7 @@
 {% block title %}Senior Junior{% endblock %}
 
 {% block content %}
-  <h1 style="margin-top: 40px;" class="smoky">Курсы для программистов от программистов</h1>
+  <h1 style="margin-top: 40px;" class="smoky">Курсы от программистов  для программистов</h1>
   <div class="list-item">
 
     <p><i class="fa fa-solid fa-star main-icon"></i> <b>Senior Junior</b> — так называется наша площадка с курсами. Каждый сеньор чувствует себя джуном, когда учит новый язык ;)</p>
@@ -32,7 +32,7 @@
       <div class="list-item">
         <div style="display: table;height: 100%;">
           <div class="block course-header">
-            <object  type="image/svg+xml" data="{% static "courses/v54/images/" %}{{ course.course_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
+            <object  type="image/svg+xml" data="{% static "courses/v55/images/" %}{{ course.course_id }}.svg" class="course-img svg-item"  width="2.5em" height="2.5em"> </object>
           </div>
           <div class="block course-header left-padding">
             <h1 class="no-margin"><a href="{% url 'course' course.course_id %}" target="_self">{{ course.title }}</a></h1>
@@ -80,7 +80,7 @@
           </div>
           <div class="text-about text-small indent-small author-container">
               {% for author in course.tags.authors %}
-                  <img src="{% static "courses/v54/images/authors/" %}{{ author.author }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+                  <img src="{% static "courses/v55/images/authors/" %}{{ author.author }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
                   <span class="margin-horisontal-small"><a href="/authors/{{ author.author }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
               {% endfor %}
           </div>
@@ -91,7 +91,7 @@
             </div>
             <div class="text-about text-small indent-small author-container">
               {% for author in course.tags.edited_by %}
-                  <img src="{% static "courses/v54/images/authors/" %}{{ author.edited_by }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+                  <img src="{% static "courses/v55/images/authors/" %}{{ author.edited_by }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
                   <span class="margin-horisontal-small"><a href="/authors/{{ author.edited_by }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
               {% endfor %}
             </div>
