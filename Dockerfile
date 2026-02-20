@@ -41,8 +41,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 RUN groupadd --system --gid 999 scene \
  && useradd --system --gid 999 --uid 999 scene
 
-COPY --from=builder --chown=scene:scene /app/staticfiles /app/scene/staticfiles
 COPY --from=builder --chown=scene:scene /app /app
+COPY --from=builder --chown=scene:scene /app/staticfiles /app/scene/staticfiles
 
 ENV PATH="/app/.venv/bin:$PATH"
 
