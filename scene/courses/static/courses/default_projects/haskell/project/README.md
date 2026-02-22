@@ -1,1 +1,1 @@
-# Playground-проект Haskell
+# Haskell-проект для песочницы

@@ -9,14 +9,126 @@
   </div>
   <div style="display: table;height: 100%;" class="MarginBottom">
     <div class="block course-header">
-      <object type="image/svg+xml" data="{% static "courses/v51/images/" %}{{ course_id }}.svg" class="svg-item course-img" width="30" height="30"> </object>
+      <object type="image/svg+xml" data="{% static "courses/v54/images/" %}{{ course_id }}.svg" class="svg-item course-img" width="30" height="30"> </object>
     </div>
     <div class="block course-header left-padding">
-      <h1 class="no-margin">{{ course_title }}. Оглавление</h1>
+      <h1 class="no-margin">{{ course_title }}</h1>
     </div>
   </div>
 
-  <div class="list-item">
+  <div id="buttons" class="item-tabs">
+    <button class="btn-tab" disabled onclick="switch_tab(this)" id="contents">
+      Оглавление
+    </button>
+    <button class="btn-tab" onclick="switch_tab(this)" id="about">
+      О курсе
+    </button>
+    <button class="btn-tab" onclick="switch_tab(this)" id="progress">
+      Мой прогресс
+    </button>
+  </div>
+
+  <div class="list-item vis_hid" id="tab_about">
+    <div>
+    {{ tags.description|linebreaks }}
+    </div>
+
+    <div class="text-about text-small indent-small">
+      На этом языке написаны:
+    </div>
+    <div>
+      {% for project in tags.projects %}
+      <div class="chips block text-about text-small">
+        <a href="{{project.url}}" target="_blank" rel="noopener noreferrer" class="smoky">{{ project.name }}</a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-about text-small indent-small">
+      {% if tags.tasks %}
+      Вас ждут:
+      {% else %}
+      Вас ждет:
+      {% endif %}
+    </div>
+    <div>
+      <div class="chips block text-small"><a href="{{tags.url}}" target="_blank" rel="noopener noreferrer" class="smoky">{{ tags.version }}</a></div>
+      {% if tags.tasks %}
+        {% if tags.chapters %}<div class="chips block text-small"><a href="{% url 'course' course_id %}" target="_self" class="smoky">{{ tags.chapters }}</a></div>{% endif %}
+          <div class="chips block text-small"><a href="{% url 'course' course_id %}" target="_self" class="smoky">{{ tags.tasks }}</a></div>
+          {% if tags.practice_projects %}<div class="chips block text-small"><a href="{% url 'course' course_id %}" target="_self" class="smoky">{{ tags.practice_projects }}</a></div>{% endif %}
+      {% endif %}
+    </div>
+
+    <div>
+      <div class="text-about text-small indent-small">
+        {% if tags.authors|length > 1 %}
+           Авторы:
+        {% else %}
+           Автор:
+        {% endif %}
+      </div>
+      <div class="text-about text-small indent-small author-container">
+          {% for author in tags.authors %}
+              <img src="{% static "courses/v54/images/authors/" %}{{ author.author }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+              <span class="margin-horisontal-small"><a href="/authors/{{ author.author }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
+          {% endfor %}
+      </div>
+
+      {% if tags.edited_by|length > 0 %}
+        <div class="text-about text-small indent-small">
+          Под редакцией:
+        </div>
+        <div class="text-about text-small indent-small author-container">
+          {% for author in tags.edited_by %}
+              <img src="{% static "courses/v54/images/authors/" %}{{ author.edited_by }}.jpg" alt="{{ author.full_name }}" class="author-photo"/>
+              <span class="margin-horisontal-small"><a href="/authors/{{ author.edited_by }}" target="_self" rel="noopener noreferrer">{{ author.full_name }}</a></span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+
+  </div>
+
+  <div class="list-item vis_hid" id="tab_progress">
+    {% if user.is_authenticated and course.total_chapters  %}
+        <div class="content">
+          <div class="profile-skills">
+            <div>
+              <input type="checkbox" id="sk1">
+              <ul class="skills skills1">
+                {% if course.total_chapters %}
+                  <li class="sk-chapters" style="--per: {{ course.chapters_pct }};"><span>Главы: {{ course.finished_chapters }} / {{ course.total_chapters }}</span></li>
+                {% endif %}
+                {% if course.total_tasks %}
+                  <li class="sk-tasks" style="--per: {{ course.tasks_pct }};"><span>Задачи: {{ course.finished_tasks }} / {{ course.total_tasks }}</span></li>
+                {% endif %}
+                {% if course.total_projects %}
+                  <li class="sk-projects" style="--per: {{ course.projects_pct }};"><span>Проекты: {{ course.finished_projects }} / {{ course.total_projects }}</span></li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+    {% else %}
+      {% if not user.is_authenticated  %}
+            <p>Залогиньтесь, чтобы видеть свой прогресс.</p><p>
+            <a href="/login/?next=/courses/{{course_id}}/" class="btn-white" target="_self">
+              Войти
+            </a></p>
+        {% else %}
+        <p>Вы еще не начали этот курс.</p><p>
+        <a href="/courses/{{course_id}}/start_course/" class="btn-white" target="_self">
+          <i class="fa fa-play fa-fw"></i>
+          Начать
+        </a></p>
+        {% endif %}
+    {% endif %}
+
+  </div>
+
+  <div class="list-item" id="tab_contents">
     <div class="header-item header-div smoky">
       <div class="block header-left-div">
         Глава
@@ -28,6 +140,7 @@
       </div>
     </div>
     {% for chapter in chapters_list %}
+
     {% if chapter.subchapters %}
       <div class="chapter-item chapter-item-light">
     {% else %}
@@ -36,18 +149,20 @@
         <div class="block header-left-div" {% if chapter.subchapters %} onclick="on_click_chapter_with_subchapters(this)" {% endif %}>
           {% if 'chapter_' in chapter.chapter_id %}
             {% if chapter.subchapters %}
-              <span class="like_link pointer"><i class="fa fa-chevron-right fa-fw"></i> {{ chapter.title }}</span>
+              <span class="like_link pointer"><i class="fa fa-chevron-right fa-fw left-icon"></i> {{ chapter.title }}</span>
             {% else %}
-            <span><i class="fa fa-chevron-right fa-fw primary-color pointer" style="visibility: hidden;"></i></span>
+              <span><i class="fa fa-chevron-right fa-fw primary-color pointer left-icon" style="visibility: hidden;"></i></span>
               <a href="/courses/{{ course_id }}/chapters/{{ chapter.chapter_id }}/" target="_self">{{ chapter.title }}</a>
             {% endif %}
           {% else %}
-          <span><i class="fa fa-chevron-right fa-fw primary-color pointer" style="visibility: hidden;"></i></span>
-            <a href="/courses/{{ course_id }}/practice/{{ chapter.chapter_id }}/" target="_self"><i class="fa fa-solid fa-rocket"></i> {{ chapter.title }}</a>
+          <span><a href="/courses/{{ course_id }}/practice/{{ chapter.chapter_id }}/" target="_self"><i class="fa fa-solid fa-rocket fa-fw left-icon"></i>
+            {{ chapter.title }}</a></span>
           {% endif %}
         </div>
         
         {% if not chapter.subchapters %}
+
+        {% if 'chapter_' in chapter.chapter_id %}
           <div class="block chapter-right-part tasks-count-div">
             {% if chapter.tasks_completed > 0 and  chapter.tasks_completed == chapter.tasks_total %}
                 <span class="text-color-green">{{ chapter.tasks_completed }} / {{ chapter.tasks_total }}</span>
@@ -59,6 +174,9 @@
                 {% endif %}
             {% endif %}
           </div>
+
+          {% endif %}
+          
           <div class="block chapter-right-part status-div">
             <div class="tooltip-container">
               {% if chapter.subchapters %}
@@ -128,12 +246,10 @@
     {% endfor %}
 
     {% if in_development %}
-        <h3 class="indent-medium smoky">Этот курс находится в разработке. Следующие главы скоро появятся.</h3>
-        <div class="chapter-item header-div chapter-item-light">
-          <div class="block header-left-div">
-            <span class="smoky">............<i class="fa fa-pencil fa-fw"></i></span>
-          </div>
-        </div>
+      <span class="indent-medium smoky"><br/><br/>
+        <i class="fa fa-pencil fa-fw"></i>.... Этот курс находится в разработке. Следующие главы скоро появятся.
+      </span>
+
     {% endif %}
 
   </div>

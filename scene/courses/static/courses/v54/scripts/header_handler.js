@@ -25,6 +25,19 @@ function copyCodeToClipboard() {
   navigator.clipboard.writeText(copyText.textContent);
 }
 
+function switch_tab(btn) {
+  let elements = document.getElementsByClassName("btn-tab");
+
+  for (let i = 0; i < elements.length; i++) {
+    if (elements[i].id !== btn.id)
+      elements[i].disabled = false;
+      document.getElementById("tab_"+elements[i].id).classList.add('vis_hid');
+  }
+
+  btn.disabled = true;
+  document.getElementById("tab_"+btn.id).classList.remove('vis_hid');
+}
+
 function handle_generate_tg_bot_key_response(response) {
     if (!response.hasOwnProperty('key')) {
       return;

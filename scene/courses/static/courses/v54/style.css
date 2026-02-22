@@ -663,6 +663,24 @@ header {
     border: 2px solid var(--color-light-item);
 }
 
+.left-icon {
+    width: 1.8em !important;
+}
+
+.milestone-item {
+    border: 2px transparent !important;
+}
+
+.milestone-icon {
+    color: #0789d9;
+}
+
+.item-tabs {
+    border: 2px transparent;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
 .list-item {
     border-radius: 10px;
     border: 2px solid var(--list-item-border);
@@ -787,7 +805,7 @@ a.footer:link {
 a.footer:visited {
     color: var(--color-highlight);
 }
-  
+
 a.footer:hover {
     color: var(--color-highlight-intensive);
 }
@@ -881,6 +899,29 @@ a.text-secondary {
 
 .left-padding {
     padding-left: 10px;
+}
+
+.btn-tab {
+    background-color: var(--color-switch-theme-symbol);
+    border: 2px solid var(--color-switch-theme-symbol); 
+    color: var(--color-body);
+    padding: 5px 10px;
+    font-family: "Roboto",  sans-serif;
+    font-size: 1em;
+    height: 2.1em !important;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.btn-tab:hover {
+    background-color: var(--color-blue);
+    border: 2px solid var(--color-blue);
+}
+
+.btn-tab:disabled {
+    color: var(--color-switch-theme-symbol);
+    background-color: transparent;
+    border: 2px solid var(--color-switch-theme-symbol); 
 }
 
 .btn {
@@ -1188,6 +1229,10 @@ input:focus{
     }
 
     .list-item {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    .item-tabs {
         padding-left: 8px;
         padding-right: 8px;
     }
