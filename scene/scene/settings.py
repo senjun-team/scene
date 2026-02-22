@@ -17,22 +17,25 @@ import os.path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-def read_json_from_file(filepath):
+def read_json_from_file(filepath, notexists_ok=False):
+    if notexists_ok and not Path(filepath).exists():
+        return {}
+
     with open(filepath, "r") as f:
         return json.load(f)
 
-conf = read_json_from_file( str(BASE_DIR / "conf.json") )
+conf = read_json_from_file( str(BASE_DIR / "conf.json"), True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = conf["django_secret_key"]
+SECRET_KEY = conf.get("django_secret_key", "wellthatyourproblem")
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = bool(os.environ.get("DJANGO_DEBUG", False))
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".senjun.ru"]
 CSRF_TRUSTED_ORIGINS = ["https://*.senjun.ru"]
@@ -79,22 +82,22 @@ MIDDLEWARE = [
 SOCIALACCOUNT_PROVIDERS = {
     'yandex': {
         'APP': {
-            'client_id': conf["socialaccount"]["yandex"]["client_id"],
-            'secret': conf["socialaccount"]["yandex"]["secret"],
-            'key': ''
+            'client_id': conf.get("socialaccount", {}).get("yandex", {}).get("client_id", "client-id"),
+            'secret': conf.get("socialaccount", {}).get("yandex", {}).get("secret", "secret"),
+            'key': conf.get("socialaccount", {}).get("yandex", {}).get("key", "key")
         }
     },
     'vk': {
         'APP': {
-            'client_id': conf["socialaccount"]["vk"]["client_id"],
-            'secret': conf["socialaccount"]["vk"]["secret"],
-            'key': conf["socialaccount"]["vk"]["key"]
+            'client_id': conf.get("socialaccount", {}).get("vk", {}).get("client_id", "client-id"),
+            'secret': conf.get("socialaccount", {}).get("vk", {}).get("secret", "secret"),
+            'key': conf.get("socialaccount", {}).get("vk", {}).get("key", "key")
         }
     },
     'telegram': {
         'APP': {
-            'client_id': conf["socialaccount"]["telegram"]["client_id"],
-            'secret': conf["socialaccount"]["telegram"]["secret"]
+            'client_id': conf.get("socialaccount", {}).get("telegram", {}).get("client_id", "client-id"),
+            'secret': conf.get("socialaccount", {}).get("telegram", {}).get("secret", "secret")
         }
     }
 }
@@ -158,11 +161,11 @@ AUTHENTICATION_BACKENDS = [
 DATABASES = {
 "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "scene",
-        "USER": "scene",
-        "PASSWORD": conf["scene_db"]["password"],
-        "HOST": conf["scene_db"]["host"],
-        "PORT": conf["scene_db"]["port"],
+        "NAME": conf.get("scene_db", {}).get("database", "scene"),
+        "USER": conf.get("scene_db",{}).get("user", "senjun"),
+        "PASSWORD": conf.get("scene_db", {}).get("password", "some_password"),
+        "HOST": conf.get("scene_db", {}).get("host", "127.0.0.1"),
+        "PORT": conf.get("scene_db", {}).get("port", "5432"),
     }
 }
 
@@ -205,7 +208,7 @@ ADMIN_ENABLED = False
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = conf["static_root"]
+STATIC_ROOT = conf.get("static_root", "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -214,10 +217,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 EMAIL_USE_SSL = True
-EMAIL_HOST = conf["mail_for_user_registration"]["host"] 
-EMAIL_HOST_USER = conf["mail_for_user_registration"]["email_address"] 
-DEFAULT_FROM_EMAIL = conf["mail_for_user_registration"]["email_address"] 
-EMAIL_HOST_PASSWORD = conf["mail_for_user_registration"]["host_password"] 
+EMAIL_HOST = conf.get("mail_for_user_registration", {}).get("host", "smtp.some.org") 
+EMAIL_HOST_USER = conf.get("mail_for_user_registration", {}).get("email_address", "your_email") 
+DEFAULT_FROM_EMAIL = conf.get("mail_for_user_registration", {}).get("email_address", "your_email") 
+EMAIL_HOST_PASSWORD = conf.get("mail_for_user_registration", {}).get("host_password", "password") 
 EMAIL_PORT = 465
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 ACCOUNT_ACTIVATION_DAYS = 3
@@ -229,12 +232,12 @@ LOGOUT_REDIRECT_URL = "/courses"
 LOGIN_URL = "/login"
 
 # Must be equal to the key in the bot service.
-TG_BOT_KEY = conf["tg_bot_senjun"]["key"]
+TG_BOT_KEY = conf.get("tg_bot_senjun", {}).get("key", "key")
 
-INFRA_TG_BOT_TOKEN = conf["tg_bot_infra_alerts"]["token"]
-INFRA_TG_BOT_CHANNEL_ID = conf["tg_bot_infra_alerts"]["channel_id"]
+INFRA_TG_BOT_TOKEN = conf.get("tg_bot_infra_alerts", {}).get("token", "token")
+INFRA_TG_BOT_CHANNEL_ID = conf.get("tg_bot_infra_alerts", {}).get("channel_id", "channel_id")
 
-COURSE_AUTHORS = read_json_from_file(os.path.join(STATIC_ROOT, "courses/authors/courses.json"))
+COURSE_AUTHORS = read_json_from_file( BASE_DIR / "courses/static/courses/authors/courses.json")
 
 def is_main_file(file_name, main_file_name):
     if main_file_name is not None:
@@ -264,7 +267,7 @@ def get_project_structure(cur_obj, cur_path, main_file_name = None):
 
 
 def get_default_playground_projects():
-    root_playgrounds = os.path.join(STATIC_ROOT, "courses/default_projects/")
+    root_playgrounds = BASE_DIR / "courses/static/courses/default_projects/"
     playgrounds = {}
 
     for item in os.listdir(root_playgrounds):
