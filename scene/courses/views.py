@@ -388,7 +388,7 @@ def course(request, course_id):
                 calc_progress(course)
 
         res = c.post_request("get_course_description", {"course_id": course_id}, {})
-        if "description" in res:
+        if res is not None and "description" in res:
             tags["description"] = res["description"]
 
         context = {

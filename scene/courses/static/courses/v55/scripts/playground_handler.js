@@ -36,6 +36,7 @@ const req_timeout_ms = 60 * 1000;
 const csrftoken_cookie = 'csrftoken';
 
 var onlineIdeEditor = null;
+var onlineIdeEditors = [];
 
 var project_contents = null;
 var prev_file = null;
@@ -174,9 +175,9 @@ function getExtensions(lang) {
 }
 
 function editorFromTextArea(textarea, extensions) {
-  onlineIdeEditor = new EditorView({doc: textarea.value, extensions});
-  textarea.parentNode.insertBefore(onlineIdeEditor.dom, textarea);
-  textarea.style.display = "none";
+  //onlineIdeEditor = new EditorView({doc: textarea.value, extensions});
+  //textarea.parentNode.insertBefore(onlineIdeEditor.dom, textarea);
+  //textarea.style.display = "none";
   changePlaygroundEditorTheme(onlineIdeEditor);
 }
 
@@ -185,10 +186,12 @@ function replaceTextAreaWithIde(lang) {
 }
 
 function changePlaygroundEditorTheme() {
-  onlineIdeEditor.dispatch({
-    effects: editorTheme.reconfigure(
-      is_light ? EditorView.baseTheme() : oneDark
-    )
+  onlineIdeEditors.forEach(function(elem) {
+    elem.dispatch({
+      effects: editorTheme.reconfigure(
+        is_light ? EditorView.baseTheme() : oneDark
+      )
+    });
   });
 }
 
@@ -226,9 +229,9 @@ async function run_code() {
       const lang_id = document.getElementsByTagName('body')[0].getAttribute("playground_lang_id");
 
       if (prev_file) {
-        findNode(prev_file, project_contents).contents = onlineIdeEditor.state.doc.toString();
+        findNode(prev_file, project_contents).contents = onlineIdeEditors[prev_file - 1].state.doc.toString();
       } else {
-        findNode(main_file, project_contents).contents = onlineIdeEditor.state.doc.toString();
+        findNode(main_file, project_contents).contents = onlineIdeEditors[main_file - 1].state.doc.toString();
       }
 
       formData.append("project", JSON.stringify(project_contents));
@@ -304,11 +307,11 @@ function download_project() {
 
   const lang_id = document.getElementsByTagName('body')[0].getAttribute("playground_lang_id");
 
-  if (prev_file) {
-    findNode(prev_file, project_contents).contents = onlineIdeEditor.state.doc.toString();
-  } else {
-    findNode(main_file, project_contents).contents = onlineIdeEditor.state.doc.toString();
-  }
+      if (prev_file) {
+        findNode(prev_file, project_contents).contents = onlineIdeEditors[prev_file - 1].state.doc.toString();
+      } else {
+        findNode(main_file, project_contents).contents = onlineIdeEditors[main_file - 1].state.doc.toString();
+      }
 
   let d = new Date(); 
   let dt = d.getDate() + "_"
@@ -384,10 +387,12 @@ function getFileExtension(filename) {
 }
 
 function click_on_node(node_id) {
+
   let node = findNode(node_id, project_contents);
 
   if (prev_file) {
-    findNode(prev_file, project_contents).contents = onlineIdeEditor.state.doc.toString();
+    onlineIdeEditors[prev_file - 1].dom.setAttribute("style", "display: none !important;");
+    findNode(prev_file, project_contents).contents = onlineIdeEditors[prev_file - 1].state.doc.toString();
     document.getElementById(prev_file).classList.remove("selected_file");
   }
 
@@ -396,16 +401,34 @@ function click_on_node(node_id) {
 
   let langExt = getExtensionByLang(getFileExtension(node.name));
 
-  onlineIdeEditor.dispatch({
-    changes: {from: 0, to: onlineIdeEditor.state.doc.length, insert: node.contents},
+  onlineIdeEditors[node_id - 1].dom.setAttribute("style", "");
+  onlineIdeEditors[node_id - 1].dispatch({
+    changes: {from: 0, to: onlineIdeEditors[node_id - 1].state.doc.length, insert: node.contents},
     effects: langConf.reconfigure(langExt ? langExt : [])
   });
 }
 
+function set_dom_visability(dom, bool)
+{
+  var style = dom.getAttribute("style");
+}
 
 function add_node(cur_node, dom_elem) {
   number += 1;
   cur_node.id = number;
+
+  // MY CODE
+  var textarea = document.getElementById('online_ide');
+  const lang_id = document.getElementsByTagName('body')[0].getAttribute("playground_lang_id");
+
+  onlineIdeEditors.push(new EditorView({doc: textarea.value, extensions: getExtensions(lang_id)}));
+  var editor = onlineIdeEditors[onlineIdeEditors.length - 1];
+  editor.dom.setAttribute("style", "display: none !important;")
+
+  textarea.parentNode.insertBefore(editor.dom, textarea);
+  textarea.style.display = "none";
+
+  // /MY CODE
 
   if (cur_node.hasOwnProperty('contents')) {
     const s = cur_node.contents; // b64DecodeUnicode(cur_node.contents);
@@ -475,7 +498,7 @@ function handle_keyboard_shortcuts() {
 
 window.addEventListener('load', function () {
     switch_theme_pageload();
-    addCodeBlock();
+    //addCodeBlock();
     create_project_structure();
     add_project_structure_handler();
     add_handler_run_code();
