@@ -1,4 +1,5 @@
 import logging
+import os
 import requests
 import json
 from django.utils.timezone import now
@@ -9,11 +10,11 @@ from .models import IdRecord, User
 
 import scene.settings as settings
 
+HANDYMAN_URL = os.environ.get("HANDYMAN_URL", "http://localhost:8080/")
+
 def post_request(api, body, params):
-    # handyman url:
-    url = "http://localhost:8080/" + api
     try:
-        res = requests.post(url, params=params, json=body)
+        res = requests.post(HANDYMAN_URL + api, params=params, json=body)
         if not res.ok:
             logging.warning(
                 f"Request to handyman returned error: {res.status_code}"
