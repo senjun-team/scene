@@ -84,7 +84,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'APP': {
             'client_id': conf.get("socialaccount", {}).get("yandex", {}).get("client_id", "client-id"),
             'secret': conf.get("socialaccount", {}).get("yandex", {}).get("secret", "secret"),
-            'key': conf.get("socialaccount", {}).get("yandex", {}).get("key", "key")
+            'key': conf.get("socialaccount", {}).get("yandex", {}).get("key", "")
         }
     },
     'vk': {

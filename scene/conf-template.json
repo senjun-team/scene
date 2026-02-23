@@ -5,7 +5,7 @@
         "yandex": {
             "client_id": "client-id",
             "secret": "secret",
-            "key": "key"
+            "key": ""
         },
         "vk": {
             "client_id": "client-id",
