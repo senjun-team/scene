@@ -316,16 +316,22 @@ def send_feedback(request):
         return JsonResponse({"status": 1})
 
 
-def build_subchapters_hierarchy(chapters):
+def build_chapter_blocks_hierarchy(chapters):
     parents = {} # parent id to chapters list
     chapters_to_delete = []
 
     for c in chapters:
+        c["title"] = c["title"].replace("Глава ", "")
+
         cid = c["chapter_id"]
         if c["chapter_id"][-1] == '0' and "chapter_" in c["chapter_id"]: # parent chapter
             continue
 
         if "chapter" not in c["chapter_id"]: # practice
+            continue
+        
+        if "майлстоун" in c["title"].lower(): # milestone
+            c["milestone"] = True
             continue
 
         pid = cid[:-1] +'0'
@@ -347,7 +353,32 @@ def build_subchapters_hierarchy(chapters):
         if c["chapter_id"] not in chapters_to_delete:
             res_chapters.append(copy.deepcopy(c))
     
-    return res_chapters
+    for c in chapters:
+        if c.get("subchapters", None) is not None:
+            c["tasks_completed"] = sum(item["tasks_completed"] for item in c["subchapters"])
+            c["tasks_total"] = sum(item["tasks_total"] for item in c["subchapters"])
+            completed_subchapters = [item for item in c["subchapters"] if item["status"] == "completed"]
+            if len(completed_subchapters) == len(c["subchapters"]):
+                c["status"] = "completed"
+            else:
+                c["status"] = ""
+
+    blocks = []
+    blocks.append([])
+
+    while len(res_chapters) > 0:
+        n = 0
+        for c in res_chapters:
+            blocks[len(blocks) - 1].append(c)
+            n += 1
+            if c.get("milestone", False) is True:
+                break
+        blocks.append([])
+        res_chapters = res_chapters[n:]
+        
+    if len(blocks[len(blocks) - 1]) == 0:
+        blocks.pop()
+    return blocks
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -375,10 +406,7 @@ def course(request, course_id):
         tags["authors"] = [a for a in settings.COURSE_AUTHORS[course_id] if a.get("author") is not None]
         tags["edited_by"] = [a for a in settings.COURSE_AUTHORS[course_id] if a.get("edited_by") is not None]
 
-        for chapter in res:
-            chapter["title"] = chapter["title"].replace("Глава ", "")
-
-        chapters = build_subchapters_hierarchy(res)
+        chapters = build_chapter_blocks_hierarchy(res)
         
         course = {}
         if user_id is not None:
@@ -392,7 +420,7 @@ def course(request, course_id):
             tags["description"] = res["description"]
 
         context = {
-            "chapters_list": chapters,
+            "chapter_blocks": chapters,
             "course_id": course_id,
             "course_title": tags.get("title", course_id.capitalize()),
             "in_development": in_development,
