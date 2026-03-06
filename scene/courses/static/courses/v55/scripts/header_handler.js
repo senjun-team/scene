@@ -283,8 +283,8 @@ function change_theme_switcher_button_icon() {
 }
 
 function on_click_chapter_with_subchapters(mainChapter) {
-  var container = mainChapter.parentElement;
-  var subChapters = container.querySelectorAll("div[class=chapters-list-div]"); 
+  var container = mainChapter.parentElement.parentElement;
+  var subChapters = container.querySelectorAll(".chapters-children");
   var rotateMe = container.querySelectorAll("i")[0];
   var firstSubChapter = subChapters[0];
   var displayCurrent = firstSubChapter.style.getPropertyValue("display");

@@ -942,11 +942,11 @@ a.text-secondary {
 }
 
 .btn-tab:hover {
-    border-bottom: 2px solid var(--color-switch-theme-symbol);
+    border-bottom: 2px solid var(--color-primary-lighter);
 }
 
 .btn-tab:disabled {
-    border-bottom: 2px solid var(--color-primary-lighter);
+    border-bottom: 2px solid var(--color-block);
 }
 
 .btn {
