@@ -11,7 +11,7 @@
 
     --color-alert-primary: rgba(181, 101, 118, 1);
     --color-highlight: rgba(249, 177, 148, 1);
-    --color-highlight-intensive: rgba(229, 107, 111, 1);
+    --color-highlight-intensive: rgb(245, 84, 89);
     --color-highlight-light: rgba(237, 213, 204, 1);
 
     --color-max-contrast: rgba(255, 255, 255, 1);
@@ -20,13 +20,15 @@
     --color-code-editor-border: rgba(222, 222, 222, 0.5);
     --color-light-blue: #b8d8fc;
     --color-green: #84e3a5;
-
+    --color-practice-link: #028e9e;
     --color-ide-active-line: rgba(115, 212, 170, 0.1);
     --color-console: #07091a;
 
     --color-smoky: #848fbf;
     --color-main-icon: #c5cded;
     --color-lightest-blue: #edf5ff;
+    --color-block:#d7ddf3;
+    --color-block-bg:#edf0fd;
 
     --color-shadow: rgba(0, 0, 0, 0.05);
 
@@ -83,7 +85,7 @@
     --color-input-border: var(--color-heavy-gray);
     --color-info: var(--color-lightest-blue);
     --color-start: var(--color-light-blue);
-    --color-text-green: #2fcc65;
+    --color-text-green: #04ca8c;
     --color-practice: #aa65c7;
     --color-gray-transparent: rgba(132, 143, 191, 0.3);
 }
@@ -104,7 +106,8 @@
     --color-breadcrumps: var(--color-heavy-gray);
     --list-item-bg: #28303C;
     --list-item-border: var(--color-secondary);
-
+    --color-block:#515e92;
+    --color-block-bg:#323b61;
     --color-cm-editor: var(--color-secondary);
 
     --color-code: var(--color-main-icon);
@@ -142,7 +145,7 @@
 }
 
 .text-color-blue {
-    color: var(--color-gray-transparent);
+    color: var(--color-block);
 }
 
 .text-color-green {
@@ -641,14 +644,21 @@ header {
 }
 
 .chapter-item {
-    border-radius: 10px;
-    border: 2px solid var(--color-light-gray);
-    padding-left: 5px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: transparent;
     padding-top: 15px;
-    padding-bottom: 15px;
     padding-right: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
     margin-top: 5px;
-    margin-bottom: 10px;
+}
+
+.block-item {
+    border-radius: 10px;
+    border: 2px solid var(--color-block);
+    margin-top: 5px;
+    margin-bottom: 15px;
 }
 
 .header-item {
@@ -659,26 +669,19 @@ header {
     margin-bottom: 10px;
 }
 
-.chapter-item-light {
-    border: 2px solid var(--color-light-item);
-}
 
 .left-icon {
     width: 1.8em !important;
-}
-
-.milestone-item {
-    border: 2px transparent !important;
-}
-
-.milestone-icon {
-    color: #0789d9;
 }
 
 .item-tabs {
     border: 2px transparent;
     padding-left: 50px;
     padding-right: 50px;
+}
+
+.list-item-tabs {
+    margin-top: 0px !important;
 }
 
 .list-item {
@@ -781,6 +784,27 @@ header {
 a {
     text-decoration: none;
 }
+
+.milestone_link {
+    color: var(--color-practice-link) !important;
+}
+
+.milestone_link:hover {
+    color: var(--color-link-hover) !important;
+}
+
+.milestone-item {
+    background-color: var(--color-block-bg);
+}
+
+.practice_link {
+    color: var(--color-practice-link) !important;
+}
+
+.practice_link:hover {
+    color: var(--color-link-hover) !important;
+}
+
 
 a:visited {
     color: var(--color-link);
@@ -902,26 +926,27 @@ a.text-secondary {
 }
 
 .btn-tab {
-    background-color: var(--color-switch-theme-symbol);
-    border: 2px solid var(--color-switch-theme-symbol); 
-    color: var(--color-body);
-    padding: 5px 10px;
+    background-color: var(--list-item-bg);
+    border: 2px solid var(--list-item-border);
+    box-shadow: 0px 4px 8px var(--color-shadow);
+    border-bottom: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+    color: var(--color-switch-theme-symbol);
+    padding: 10px 15px;
     font-family: "Roboto",  sans-serif;
     font-size: 1em;
-    height: 2.1em !important;
+    height: 2.5em !important;
     cursor: pointer;
-    border-radius: 10px;
 }
 
 .btn-tab:hover {
-    background-color: var(--color-blue);
-    border: 2px solid var(--color-blue);
+    border-bottom: 2px solid var(--color-block);
 }
 
 .btn-tab:disabled {
-    color: var(--color-switch-theme-symbol);
-    background-color: transparent;
-    border: 2px solid var(--color-switch-theme-symbol); 
+    border-bottom: 2px solid var(--color-primary-lighter);
 }
 
 .btn {

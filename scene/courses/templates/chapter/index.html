@@ -15,7 +15,7 @@
     <a href="/" target="_self">Главная</a> / 
     <a href="/courses/" target="_self">Курсы</a> / 
     <a href="/courses/{{ course_id }}" target="_self">{{ course_title }}</a> / 
-    {% if parent_chapter_id and parent_chapter_title %}
+    {% if parent_chapter_id and parent_chapter_title and 'Майлстоун' not in title %}
     <a href="/courses/{{ course_id }}/chapters/{{ parent_chapter_id }}" target="_self">{{ parent_chapter_title }}</a> / 
     {% endif %}
     {{ title }}

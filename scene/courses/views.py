@@ -316,16 +316,40 @@ def send_feedback(request):
         return JsonResponse({"status": 1})
 
 
-def build_subchapters_hierarchy(chapters):
+def build_chapter_blocks_hierarchy(chapters):
+    course_stats = {
+        "total_chapters": 0,
+        "finished_chapters": 0,
+
+        "total_tasks": 0,
+        "finished_tasks": 0,
+
+        "total_projects": 0,
+        "finished_projects": 0,
+    }
+
     parents = {} # parent id to chapters list
     chapters_to_delete = []
 
     for c in chapters:
+        c["title"] = c["title"].replace("Глава ", "")
+
         cid = c["chapter_id"]
+
         if c["chapter_id"][-1] == '0' and "chapter_" in c["chapter_id"]: # parent chapter
             continue
 
         if "chapter" not in c["chapter_id"]: # practice
+            course_stats["total_projects"] += 1
+            course_stats["finished_projects"] += int(c["status"] == "completed")
+
+            c["tasks_total"] = 1
+            if c["status"] == "completed":
+                c["tasks_completed"] = 1
+            continue
+        
+        if "майлстоун" in c["title"].lower(): # milestone
+            c["milestone"] = True
             continue
 
         pid = cid[:-1] +'0'
@@ -335,6 +359,12 @@ def build_subchapters_hierarchy(chapters):
         
         parents[pid].append(copy.deepcopy(c))
         chapters_to_delete.append(cid)
+
+        course_stats["total_chapters"] += 1
+        course_stats["finished_chapters"] += int(c["status"] == "completed")
+
+        course_stats["total_tasks"] += c["tasks_total"]
+        course_stats["finished_tasks"] += c["tasks_completed"]
 
     for c in chapters:
         cid = c["chapter_id"]
@@ -347,7 +377,33 @@ def build_subchapters_hierarchy(chapters):
         if c["chapter_id"] not in chapters_to_delete:
             res_chapters.append(copy.deepcopy(c))
     
-    return res_chapters
+    for c in res_chapters:
+        if c.get("subchapters", None) is not None:
+            c["tasks_completed"] = sum(item["tasks_completed"] for item in c["subchapters"])
+            c["tasks_total"] = sum(item["tasks_total"] for item in c["subchapters"])
+            completed_subchapters = [item for item in c["subchapters"] if item["status"] == "completed"]
+            if len(completed_subchapters) == len(c["subchapters"]):
+                c["status"] = "completed"
+            else:
+                c["status"] = ""
+
+
+    blocks = []
+    blocks.append([])
+
+    while len(res_chapters) > 0:
+        n = 0
+        for c in res_chapters:
+            blocks[len(blocks) - 1].append(c)
+            n += 1
+            if c.get("milestone", False) is True:
+                break
+        blocks.append([])
+        res_chapters = res_chapters[n:]
+        
+    if len(blocks[len(blocks) - 1]) == 0:
+        blocks.pop()
+    return blocks, course_stats
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -375,28 +431,23 @@ def course(request, course_id):
         tags["authors"] = [a for a in settings.COURSE_AUTHORS[course_id] if a.get("author") is not None]
         tags["edited_by"] = [a for a in settings.COURSE_AUTHORS[course_id] if a.get("edited_by") is not None]
 
-        for chapter in res:
-            chapter["title"] = chapter["title"].replace("Глава ", "")
-
-        chapters = build_subchapters_hierarchy(res)
+        chapters, course_stats = build_chapter_blocks_hierarchy(res)
         
-        course = {}
-        if user_id is not None:
-            res = c.post_request("course_stats", {"course_id": course_id}, {"user_id": user_id})
-            if res is not None and "error" not in res and len(res) > 0:
-                course = res[0]
-                calc_progress(course)
+        if user_id is None:
+            course_stats = {}
+        else:
+            calc_progress(course_stats)
 
         res = c.post_request("get_course_description", {"course_id": course_id}, {})
         if res is not None and "description" in res:
             tags["description"] = res["description"]
 
         context = {
-            "chapters_list": chapters,
+            "chapter_blocks": chapters,
             "course_id": course_id,
             "course_title": tags.get("title", course_id.capitalize()),
             "in_development": in_development,
-            "course": course,
+            "course": course_stats,
             "tags": tags
         }
 

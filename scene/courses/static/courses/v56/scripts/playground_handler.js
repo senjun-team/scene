@@ -124,13 +124,6 @@ function showModal(title, msgHtml) {
   modalMsg.style.display = "block";
 }
 
-
-// Transforms element to code block
-function addCodeBlock() {
-  const lang_id = document.getElementsByTagName('body')[0].getAttribute("playground_lang_id");
-  replaceTextAreaWithIde(lang_id);
-}
-
 function getExtensionByLang(lang) {
   if (lang === "python" || lang === "py") {
     return python();
@@ -172,17 +165,6 @@ function getExtensions(lang) {
   extensions.push(langConf.of(getExtensionByLang(lang)));
 
   return extensions;
-}
-
-function editorFromTextArea(textarea, extensions) {
-  //onlineIdeEditor = new EditorView({doc: textarea.value, extensions});
-  //textarea.parentNode.insertBefore(onlineIdeEditor.dom, textarea);
-  //textarea.style.display = "none";
-  changePlaygroundEditorTheme(onlineIdeEditor);
-}
-
-function replaceTextAreaWithIde(lang) {
-  editorFromTextArea(document.getElementById('online_ide'), getExtensions(lang));
 }
 
 function changePlaygroundEditorTheme() {
@@ -408,16 +390,10 @@ function click_on_node(node_id) {
   });
 }
 
-function set_dom_visability(dom, bool)
-{
-  var style = dom.getAttribute("style");
-}
-
 function add_node(cur_node, dom_elem) {
   number += 1;
   cur_node.id = number;
 
-  // MY CODE
   var textarea = document.getElementById('online_ide');
   const lang_id = document.getElementsByTagName('body')[0].getAttribute("playground_lang_id");
 
@@ -427,8 +403,6 @@ function add_node(cur_node, dom_elem) {
 
   textarea.parentNode.insertBefore(editor.dom, textarea);
   textarea.style.display = "none";
-
-  // /MY CODE
 
   if (cur_node.hasOwnProperty('contents')) {
     const s = cur_node.contents; // b64DecodeUnicode(cur_node.contents);
@@ -498,11 +472,11 @@ function handle_keyboard_shortcuts() {
 
 window.addEventListener('load', function () {
     switch_theme_pageload();
-    //addCodeBlock();
     create_project_structure();
     add_project_structure_handler();
     add_handler_run_code();
     add_handler_for_modal_message();
     toggle_left_menu();
     handle_keyboard_shortcuts();
+    changePlaygroundEditorTheme();
 });
