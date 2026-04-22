@@ -39,9 +39,10 @@ DEBUG = bool(os.environ.get("DJANGO_DEBUG", False))
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".senjun.ru"]
 CSRF_TRUSTED_ORIGINS = ["https://*.senjun.ru"]
-
+ALLAUTH_TRUSTED_PROXY_COUNT = 1
 CSRF_FAILURE_VIEW = 'courses.views.csrf_failure'
-
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
 # Application definition
 
@@ -282,4 +283,3 @@ def get_default_playground_projects():
     return playgrounds
 
 PLAYGROUND_PROJECTS = get_default_playground_projects()
-
