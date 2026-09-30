@@ -45,20 +45,12 @@
             <i class="fa fa-chevron-right fa-fw"></i>
             Дальше
           </a>
-          <a href="/donation/" class="btn-vivid indent-left-small">
-            <i class="fa fa-heart fa-fw"></i>
-            <span class="desktop-only">Поддержать проект</span>
-          </a>
         </div>
         {% else %}
             {% if course_status == 'completed' %}
               <h1 class="info-block indent-medium">
                 <i class="fa fa-solid fa-star"></i> Курс успешно завершен
               </h1>
-              <a href="/donation/" class="btn-vivid indent-left-small">
-                <i class="fa fa-heart fa-fw"></i>
-                <span class="desktop-only">Поддержать проект</span>
-              </a>
             {% else %}
               {% if in_development %}
                 <h1 class="info-block indent-medium">
